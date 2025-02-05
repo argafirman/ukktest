@@ -12,7 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('detailsuppliers', function (Blueprint $table) {
-            $table->id();
+            $table->id('DetailID');
+            $table->unsignedBigInteger('ProdukID');
+            $table->integer('JumlahProduk');
+            $table->decimal('TotalHarga', 10, 2);
+            $table->string('NamaSupplier', 255);
+            $table->foreign('ProdukID')->references('ProdukID')->on('produks');
             $table->timestamps();
         });
     }
