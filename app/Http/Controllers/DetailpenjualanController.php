@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\penjual;
+use App\Models\detailpenjualan;
 use Illuminate\Http\Request;
 
-class PenjualController extends Controller
+class DetailpenjualanController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class PenjualController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(penjual $penjual)
+    public function show(detailpenjualan $detailpenjualan)
     {
         //
     }
@@ -42,7 +42,7 @@ class PenjualController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(penjual $penjual)
+    public function edit(detailpenjualan $detailpenjualan)
     {
         //
     }
@@ -50,7 +50,7 @@ class PenjualController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, penjual $penjual)
+    public function update(Request $request, detailpenjualan $detailpenjualan)
     {
         //
     }
@@ -58,7 +58,7 @@ class PenjualController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(penjual $penjual)
+    public function destroy(detailpenjualan $detailpenjualan)
     {
         //
     }
