@@ -15,6 +15,29 @@
         </a>
     </li>
 
+
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('produk.index') }}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Produk</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('penjualan.index') }}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Penjualan</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('pelanggan.index') }}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Pelanggan</span>
+        </a>
+    </li>
+
+
     {{-- <li class="nav-item">
         <a class="nav-link" href="{{ route('users.index') }}">
             <i class="fas fa-fw fa-users"></i>
