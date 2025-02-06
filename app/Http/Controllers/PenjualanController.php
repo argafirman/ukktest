@@ -2,64 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\penjualan;
+use App\Models\Penjualan;
+use App\Models\Pelanggan;
 use Illuminate\Http\Request;
 
 class PenjualanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $penjualans = Penjualan::with('pelanggan')->get();
+        return view('penjualan.index', compact('penjualans'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $pelanggans = Pelanggan::all();
+        return view('penjualan.create', compact('pelanggans'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'TanggalPenjualan' => 'required|date',
+            'Harga' => 'required|numeric',
+            'PelangganID' => 'required|exists:pelanggans,PelangganID',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(penjualan $penjualan)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(penjualan $penjualan)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, penjualan $penjualan)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(penjualan $penjualan)
-    {
-        //
+        Penjualan::create($request->all());
+        return redirect()->route('penjualan.index')->with('success', 'Penjualan berhasil ditambahkan.');
     }
 }
