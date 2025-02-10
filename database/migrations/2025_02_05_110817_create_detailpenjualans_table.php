@@ -12,13 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('detailpenjualans', function (Blueprint $table) {
-            $table->id('DetailID');
-            $table->unsignedBigInteger('PenjualanID');
-            $table->unsignedBigInteger('ProdukID');
+            $table->id();
+            $table->foreignId('penjualan_id')->constrained('penjualans')->onDelete('cascade');
+            $table->foreignId('produk_id')->constrained('produks')->onDelete('cascade');
             $table->integer('JumlahProduk');
             $table->decimal('Subtotal', 10, 2);
-            $table->foreign('PenjualanID')->references('PenjualanID')->on('penjualans');
-            $table->foreign('ProdukID')->references('ProdukID')->on('produks');
             $table->timestamps();
         });
     }

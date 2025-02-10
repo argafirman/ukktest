@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('produks', function (Blueprint $table) {
-            $table->id('ProdukID');
+            $table->id(); // Primary key default Laravel
             $table->string('NamaProduk', 255);
             $table->decimal('Harga', 10, 2);
             $table->integer('Stok');
+            $table->string('img');
             $table->timestamps();
         });
     }
