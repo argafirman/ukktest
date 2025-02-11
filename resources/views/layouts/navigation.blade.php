@@ -80,8 +80,8 @@
             <a href="{{ route('pelanggan.index') }}"
                 class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Pelanggan</a>
             <a href="{{ route('produk.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Produk</a>
-            <a href="{{ route('penjualan.index') }}"
-                class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Penjualan</a>
+            <a href="{{ route('transaksi.index') }}"
+                class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Transaksi</a>
         </div>
 
         <div class="pt-4 pb-1 border-t border-gray-200">

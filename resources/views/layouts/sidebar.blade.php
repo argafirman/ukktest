@@ -24,16 +24,16 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('penjualan.index') }}">
+        <a class="nav-link" href="{{ route('pelanggan.index') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Penjualan</span>
+            <span>Pelanggan</span>
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('pelanggan.index') }}">
+        <a class="nav-link" href="{{ route('transaksi.index') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Pelanggan</span>
+            <span>Transaksi</span>
         </a>
     </li>
 
