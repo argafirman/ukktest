@@ -13,6 +13,7 @@ use App\Http\Controllers\TransaksiController;
 |--------------------------------------------------------------------------
 */
 
+
 // Halaman utama
 Route::get('/', function () {
     return view('welcome');
@@ -36,6 +37,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('penjualan', PenjualanController::class);
     Route::resource('transaksi', TransaksiController::class);
 });
+
+
+
+
 
 // Autentikasi (login, register, dll.)
 require __DIR__ . '/auth.php';

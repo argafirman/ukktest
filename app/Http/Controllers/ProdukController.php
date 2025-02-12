@@ -7,9 +7,16 @@ use App\Models\Produk;
 
 class ProdukController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $produks = Produk::all();
+        $query = Produk::query();
+
+        if ($request->has('search')) {
+            $query->where('NamaProduk', 'like', '%' . $request->search . '%');
+        }
+
+        $produks = $query->get();
+
         return view('produk.index', compact('produks'));
     }
 
@@ -38,12 +45,6 @@ class ProdukController extends Controller
         ]);
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan.');
-    }
-
-    public function show($id)
-    {
-        $produk = Produk::findOrFail($id);
-        return view('produk.show', compact('produk'));
     }
 
     public function edit($id)
@@ -80,4 +81,3 @@ class ProdukController extends Controller
         return redirect()->route('produk.index')->with('success', 'Produk berhasil dihapus.');
     }
 }
-
