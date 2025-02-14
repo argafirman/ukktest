@@ -2,31 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pelanggan;
 use Illuminate\Http\Request;
+use App\Models\Pelanggan;
 
 class PelangganController extends Controller
 {
+    // Menampilkan daftar pelanggan
     public function index()
     {
         $pelanggans = Pelanggan::all();
         return view('pelanggan.index', compact('pelanggans'));
     }
 
-    public function create()
-    {
-        return view('pelanggan.create');
-    }
-
+    // Menyimpan pelanggan baru
     public function store(Request $request)
     {
         $request->validate([
-            'NamaPelanggan' => 'required',
-            'Alamat' => 'required',
-            'NomorTelepon' => 'required',
+            'NamaPelanggan' => 'required|string|max:255',
+            'Alamat' => 'required|string',
+            'NomorTelepon' => 'required|string|max:15',
         ]);
 
         Pelanggan::create($request->all());
-        return redirect()->route('pelanggan.index')->with('success', 'Pelanggan berhasil ditambahkan.');
+
+        return response()->json(['message' => 'Pelanggan berhasil ditambahkan.']);
+    }
+
+    // Menampilkan detail pelanggan
+    public function show($id)
+    {
+        $pelanggan = Pelanggan::findOrFail($id);
+        return response()->json($pelanggan);
+    }
+
+    // Memperbarui data pelanggan
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'NamaPelanggan' => 'required|string|max:255',
+            'Alamat' => 'required|string',
+            'NomorTelepon' => 'required|string|max:15',
+        ]);
+
+        $pelanggan = Pelanggan::findOrFail($id);
+        $pelanggan->update($request->all());
+
+        return response()->json(['message' => 'Pelanggan berhasil diperbarui.']);
+    }
+
+    // Menghapus pelanggan
+    public function destroy($id)
+    {
+        $pelanggan = Pelanggan::findOrFail($id);
+        $pelanggan->delete();
+
+        return response()->json(['message' => 'Pelanggan berhasil dihapus.']);
     }
 }
