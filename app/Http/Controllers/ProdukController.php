@@ -4,25 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Produk;
+use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Produk::query();
-
-        if ($request->has('search')) {
-            $query->where('NamaProduk', 'like', '%' . $request->search . '%');
-        }
-
-        $produks = $query->get();
+        $search = $request->input('search');
+        $produks = Produk::when($search, function ($query, $search) {
+            return $query->where('NamaProduk', 'like', "%$search%");
+        })->get();
 
         return view('produk.index', compact('produks'));
-    }
-
-    public function create()
-    {
-        return view('produk.create');
     }
 
     public function store(Request $request)
@@ -31,53 +24,57 @@ class ProdukController extends Controller
             'NamaProduk' => 'required',
             'Harga' => 'required|numeric',
             'Stok' => 'required|integer',
-            'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'img' => 'required|image|max:2048'
         ]);
 
-        $imageName = time() . '.' . $request->img->extension();
-        $request->img->move(public_path('images'), $imageName);
+        $fileName = time() . '.' . $request->img->extension();
+        $request->img->move(public_path('images'), $fileName);
 
         Produk::create([
             'NamaProduk' => $request->NamaProduk,
             'Harga' => $request->Harga,
             'Stok' => $request->Stok,
-            'img' => $imageName,
+            'img' => $fileName,
         ]);
 
-        return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan.');
+        return response()->json(['message' => 'Produk berhasil ditambahkan!']);
     }
 
-    public function edit($id)
+    public function show($id)
     {
         $produk = Produk::findOrFail($id);
-        return view('produk.edit', compact('produk'));
+        return response()->json($produk);
     }
 
     public function update(Request $request, $id)
     {
-        $produk = Produk::findOrFail($id);
-
         $request->validate([
             'NamaProduk' => 'required',
             'Harga' => 'required|numeric',
             'Stok' => 'required|integer',
-            'img' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'img' => 'image|max:2048'
         ]);
 
+        $produk = Produk::findOrFail($id);
+
         if ($request->hasFile('img')) {
-            $imageName = time() . '.' . $request->img->extension();
-            $request->img->move(public_path('images'), $imageName);
-            $produk->img = $imageName;
+            Storage::delete("images/{$produk->img}");
+            $fileName = time() . '.' . $request->img->extension();
+            $request->img->move(public_path('images'), $fileName);
+            $produk->img = $fileName;
         }
 
-        $produk->update($request->except('img') + ['img' => $produk->img]);
+        $produk->update($request->except('img'));
 
-        return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui.');
+        return response()->json(['message' => 'Produk berhasil diperbarui!']);
     }
 
     public function destroy($id)
     {
-        Produk::destroy($id);
-        return redirect()->route('produk.index')->with('success', 'Produk berhasil dihapus.');
+        $produk = Produk::findOrFail($id);
+        Storage::delete("images/{$produk->img}");
+        $produk->delete();
+
+        return response()->json(['message' => 'Produk berhasil dihapus!']);
     }
 }

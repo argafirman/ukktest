@@ -1,160 +1,125 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1>Daftar Pelanggan</h1>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
-        Tambah Pelanggan
-    </button>
-    <table class="table mt-3">
-        <thead>
-            <tr>
-                <th>Nama</th>
-                <th>Alamat</th>
-                <th>Nomor Telepon</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($pelanggans as $pelanggan)
-            <tr>
-                <td>{{ $pelanggan->NamaPelanggan }}</td>
-                <td>{{ $pelanggan->Alamat }}</td>
-                <td>{{ $pelanggan->NomorTelepon }}</td>
-                <td>
-                    <button class="btn btn-info" onclick="showDetail({{ $pelanggan->id }})">Lihat</button>
-                    <button class="btn btn-warning" onclick="editPelanggan({{ $pelanggan->id }})">Edit</button>
-                    <button class="btn btn-danger" onclick="deletePelanggan({{ $pelanggan->id }})">Hapus</button>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+    <div class="container">
+        <h1>Daftar Pelanggan</h1>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+            Tambah Pelanggan
+        </button>
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Alamat</th>
+                    <th>Nomor Telepon</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($pelanggans as $pelanggan)
+                    <tr>
+                        <td>{{ $pelanggan->NamaPelanggan }}</td>
+                        <td>{{ $pelanggan->Alamat }}</td>
+                        <td>{{ $pelanggan->NomorTelepon }}</td>
+                        <td>
+                            <button class="btn btn-info" onclick="showDetail({{ $pelanggan->id }})">Lihat</button>
+                            <button class="btn btn-warning" onclick="editPelanggan({{ $pelanggan->id }})">Edit</button>
+                            <button class="btn btn-danger" onclick="deletePelanggan({{ $pelanggan->id }})">Hapus</button>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 
-<!-- Modal Tambah Pelanggan -->
-<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="createModalLabel">Tambah Pelanggan</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="createForm">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="NamaPelanggan" class="form-label">Nama Pelanggan</label>
-                        <input type="text" class="form-control" id="NamaPelanggan" name="NamaPelanggan" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="Alamat" class="form-label">Alamat</label>
-                        <textarea class="form-control" id="Alamat" name="Alamat" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="NomorTelepon" class="form-label">Nomor Telepon</label>
-                        <input type="text" class="form-control" id="NomorTelepon" name="NomorTelepon" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </form>
+    <!-- Modal Tambah Pelanggan -->
+    <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createModalLabel">Tambah Pelanggan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createForm">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="NamaPelanggan" class="form-label">Nama Pelanggan</label>
+                            <input type="text" class="form-control" id="NamaPelanggan" name="NamaPelanggan" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Alamat" class="form-label">Alamat</label>
+                            <textarea class="form-control" id="Alamat" name="Alamat" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="NomorTelepon" class="form-label">Nomor Telepon</label>
+                            <input type="text" class="form-control" id="NomorTelepon" name="NomorTelepon" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Modal Detail Pelanggan -->
-<div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="showModalLabel">Detail Pelanggan</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Nama:</strong> <span id="detailNama"></span></p>
-                <p><strong>Alamat:</strong> <span id="detailAlamat"></span></p>
-                <p><strong>Nomor Telepon:</strong> <span id="detailNomorTelepon"></span></p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Edit Pelanggan -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Pelanggan</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="editForm">
-                    @csrf
-                    @method('PUT')
-                    <div class="mb-3">
-                        <label for="editNamaPelanggan" class="form-label">Nama Pelanggan</label>
-                        <input type="text" class="form-control" id="editNamaPelanggan" name="NamaPelanggan" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editAlamat" class="form-label">Alamat</label>
-                        <textarea class="form-control" id="editAlamat" name="Alamat" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editNomorTelepon" class="form-label">Nomor Telepon</label>
-                        <input type="text" class="form-control" id="editNomorTelepon" name="NomorTelepon" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </form>
+    <!-- Modal Detail Pelanggan -->
+    <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="showModalLabel">Detail Pelanggan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Nama:</strong> <span id="detailNama"></span></p>
+                    <p><strong>Alamat:</strong> <span id="detailAlamat"></span></p>
+                    <p><strong>Nomor Telepon:</strong> <span id="detailNomorTelepon"></span></p>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    // Tambah pelanggan
-    document.getElementById('createForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        let formData = new FormData(this);
-        fetch("{{ route('pelanggan.store') }}", {
-            method: "POST",
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            Swal.fire({
-                title: "Berhasil!",
-                text: data.message,
-                icon: "success",
-                draggable: true
-            }).then(() => location.reload());
-        })
-        .catch(error => {
-            Swal.fire({
-                title: "Gagal!",
-                text: "Terjadi kesalahan saat menambah pelanggan.",
-                icon: "error",
-                draggable: true
-            });
-        });
-    });
+    <!-- Modal Edit Pelanggan -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Pelanggan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        @csrf
+                        @method('PUT')
+                        <div class="mb-3">
+                            <label for="editNamaPelanggan" class="form-label">Nama Pelanggan</label>
+                            <input type="text" class="form-control" id="editNamaPelanggan" name="NamaPelanggan" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAlamat" class="form-label">Alamat</label>
+                            <textarea class="form-control" id="editAlamat" name="Alamat" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editNomorTelepon" class="form-label">Nomor Telepon</label>
+                            <input type="text" class="form-control" id="editNomorTelepon" name="NomorTelepon"
+                                required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    // Hapus pelanggan
-    function deletePelanggan(id) {
-        Swal.fire({
-            title: "Apakah Anda yakin?",
-            text: "Data pelanggan akan dihapus secara permanen!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Ya, hapus!",
-            cancelButtonText: "Batal"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                fetch(`/pelanggan/${id}`, {
-                    method: "DELETE",
-                    headers: {
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    }
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Tambah pelanggan
+        document.getElementById('createForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            fetch("{{ route('pelanggan.store') }}", {
+                    method: "POST",
+                    body: formData,
                 })
                 .then(response => response.json())
                 .then(data => {
@@ -168,39 +133,74 @@
                 .catch(error => {
                     Swal.fire({
                         title: "Gagal!",
-                        text: "Terjadi kesalahan saat menghapus pelanggan.",
+                        text: "Terjadi kesalahan saat menambah pelanggan.",
                         icon: "error",
                         draggable: true
                     });
                 });
-            }
         });
-    }
 
-    
-function showDetail(id) {
-    fetch(`/pelanggan/${id}`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('detailNama').textContent = data.NamaPelanggan;
-            document.getElementById('detailAlamat').textContent = data.Alamat;
-            document.getElementById('detailNomorTelepon').textContent = data.NomorTelepon;
-            new bootstrap.Modal(document.getElementById('showModal')).show();
-        });
-}
+        // Hapus pelanggan
+        function deletePelanggan(id) {
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Data pelanggan akan dihapus secara permanen!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Ya, hapus!",
+                cancelButtonText: "Batal"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/pelanggan/${id}`, {
+                            method: "DELETE",
+                            headers: {
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            Swal.fire({
+                                title: "Berhasil!",
+                                text: data.message,
+                                icon: "success",
+                                draggable: true
+                            }).then(() => location.reload());
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                title: "Gagal!",
+                                text: "Terjadi kesalahan saat menghapus pelanggan.",
+                                icon: "error",
+                                draggable: true
+                            });
+                        });
+                }
+            });
+        }
 
-// Edit pelanggan
-function editPelanggan(id) {
-    fetch(`/pelanggan/${id}`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('editNamaPelanggan').value = data.NamaPelanggan;
-            document.getElementById('editAlamat').value = data.Alamat;
-            document.getElementById('editNomorTelepon').value = data.NomorTelepon;
-            document.getElementById('editForm').action = `/pelanggan/${id}`;
-            new bootstrap.Modal(document.getElementById('editModal')).show();
-        });
-}
-</script>
+
+        function showDetail(id) {
+            fetch(`/pelanggan/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('detailNama').textContent = data.NamaPelanggan;
+                    document.getElementById('detailAlamat').textContent = data.Alamat;
+                    document.getElementById('detailNomorTelepon').textContent = data.NomorTelepon;
+                    new bootstrap.Modal(document.getElementById('showModal')).show();
+                });
+        }
+
+        // Edit pelanggan
+        function editPelanggan(id) {
+            fetch(`/pelanggan/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('editNamaPelanggan').value = data.NamaPelanggan;
+                    document.getElementById('editAlamat').value = data.Alamat;
+                    document.getElementById('editNomorTelepon').value = data.NomorTelepon;
+                    document.getElementById('editForm').action = `/pelanggan/${id}`;
+                    new bootstrap.Modal(document.getElementById('editModal')).show();
+                });
+        }
+    </script>
 @endsection
-
