@@ -78,6 +78,13 @@ class TransaksiController extends Controller
         return response()->json(['message' => 'Transaksi berhasil diperbarui!', 'data' => $transaksi]);
     }
 
+    public function cetakStruk($id)
+{
+    $transaksi = Transaksi::with(['pelanggan', 'produk'])->findOrFail($id);
+    return view('struk', compact('transaksi'));
+}
+
+
     public function destroy($id)
     {
         $transaksi = Transaksi::findOrFail($id);
