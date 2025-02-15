@@ -8,39 +8,39 @@ use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $search = $request->input('search');
-        $produks = Produk::when($search, function ($query, $search) {
-            return $query->where('NamaProduk', 'like', "%$search%");
-        })->get();
-
+        $produks = Produk::all();
         return view('produk.index', compact('produks'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'NamaProduk' => 'required',
+            'NamaProduk' => 'required|string|max:255',
             'Harga' => 'required|numeric',
             'Stok' => 'required|integer',
-            'img' => 'required|image|max:2048'
+            'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $fileName = time() . '.' . $request->img->extension();
-        $request->img->move(public_path('images'), $fileName);
+        if ($request->hasFile('img')) {
+            $imageName = time() . '.' . $request->img->extension();
+            $request->img->move(public_path('images'), $imageName);
+        } else {
+            $imageName = 'default.png';
+        }
 
         Produk::create([
             'NamaProduk' => $request->NamaProduk,
             'Harga' => $request->Harga,
             'Stok' => $request->Stok,
-            'img' => $fileName,
+            'img' => $imageName,
         ]);
 
         return response()->json(['message' => 'Produk berhasil ditambahkan!']);
     }
 
-    public function show($id)
+    public function edit($id)
     {
         $produk = Produk::findOrFail($id);
         return response()->json($produk);
@@ -49,22 +49,31 @@ class ProdukController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'NamaProduk' => 'required',
+            'NamaProduk' => 'required|string|max:255',
             'Harga' => 'required|numeric',
             'Stok' => 'required|integer',
-            'img' => 'image|max:2048'
+            'img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $produk = Produk::findOrFail($id);
 
         if ($request->hasFile('img')) {
-            Storage::delete("images/{$produk->img}");
-            $fileName = time() . '.' . $request->img->extension();
-            $request->img->move(public_path('images'), $fileName);
-            $produk->img = $fileName;
+            if ($produk->img && file_exists(public_path('images/' . $produk->img))) {
+                unlink(public_path('images/' . $produk->img));
+            }
+
+            $imageName = time() . '.' . $request->img->extension();
+            $request->img->move(public_path('images'), $imageName);
+        } else {
+            $imageName = $produk->img;
         }
 
-        $produk->update($request->except('img'));
+        $produk->update([
+            'NamaProduk' => $request->NamaProduk,
+            'Harga' => $request->Harga,
+            'Stok' => $request->Stok,
+            'img' => $imageName,
+        ]);
 
         return response()->json(['message' => 'Produk berhasil diperbarui!']);
     }
@@ -72,7 +81,11 @@ class ProdukController extends Controller
     public function destroy($id)
     {
         $produk = Produk::findOrFail($id);
-        Storage::delete("images/{$produk->img}");
+
+        if ($produk->img && file_exists(public_path('images/' . $produk->img))) {
+            unlink(public_path('images/' . $produk->img));
+        }
+
         $produk->delete();
 
         return response()->json(['message' => 'Produk berhasil dihapus!']);

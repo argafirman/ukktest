@@ -1,29 +1,29 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1>Edit Produk</h1>
-    <form action="{{ route('produk.update', $produk->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
-        <div class="form-group">
-            <label>Nama Produk</label>
-            <input type="text" name="NamaProduk" class="form-control" value="{{ $produk->NamaProduk }}" required>
-        </div>
-        <div class="form-group">
-            <label>Harga</label>
-            <input type="number" name="Harga" class="form-control" value="{{ $produk->Harga }}" required>
-        </div>
-        <div class="form-group">
-            <label>Stok</label>
-            <input type="number" name="Stok" class="form-control" value="{{ $produk->Stok }}" required>
-        </div>
-        <div class="form-group">
-            <label>Gambar Produk</label><br>
-            <img src="{{ asset('images/'.$produk->img) }}" width="100"><br>
-            <input type="file" name="img" class="form-control">
-        </div>
-        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-    </form>
-</div>
+    <div class="container">
+        <h1>Edit Produk</h1>
+        <form action="{{ route('produk.update', $produk->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="mb-3">
+                <label for="NamaProduk" class="form-label">Nama Produk</label>
+                <input type="text" class="form-control" id="NamaProduk" name="NamaProduk" value="{{ $produk->NamaProduk }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="Harga" class="form-label">Harga</label>
+                <input type="number" class="form-control" id="Harga" name="Harga" value="{{ $produk->Harga }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="Stok" class="form-label">Stok</label>
+                <input type="number" class="form-control" id="Stok" name="Stok" value="{{ $produk->Stok }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="img" class="form-label">Gambar Produk</label>
+                <input type="file" class="form-control" id="img" name="img">
+                <img src="{{ asset('images/' . $produk->img) }}" width="100" class="mt-2">
+            </div>
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a href="{{ route('produk.index') }}" class="btn btn-secondary">Kembali</a>
+        </form>
+    </div>
 @endsection
