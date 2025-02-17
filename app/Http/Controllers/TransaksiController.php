@@ -2,94 +2,76 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Transaksi;
 use App\Models\Pelanggan;
 use App\Models\Produk;
+use Illuminate\Http\Request;
 
 class TransaksiController extends Controller
 {
     public function index()
     {
-        $transaksis = Transaksi::with('pelanggan', 'produk')->get();
+        $transaksis = Transaksi::with(['pelanggan', 'produk'])->get();
         return view('transaksi.index', compact('transaksis'));
+    }
+
+    public function create()
+    {
+        $pelanggans = Pelanggan::all();
+        $produks = Produk::all();
+        return view('transaksi.create', compact('pelanggans', 'produks'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'pelanggan' => 'required',
-            'produk' => 'required',
+            'pelanggan_id' => 'required|exists:pelanggans,id',
+            'produk_id' => 'required|exists:produks,id',
             'jumlah' => 'required|integer|min:1',
-            'total_harga' => 'required|numeric|min:0',
-            'tanggal' => 'required|date',
         ]);
 
-        $pelanggan = Pelanggan::where('NamaPelanggan', $request->pelanggan)->first();
-        $produk = Produk::where('NamaProduk', $request->produk)->first();
+        $produk = Produk::findOrFail($request->produk_id);
 
-        if (!$pelanggan || !$produk) {
-            return response()->json(['message' => 'Pelanggan atau Produk tidak ditemukan!'], 400);
+        // Cek apakah stok cukup
+        if ($produk->Stok < $request->jumlah) {
+            return redirect()->route('transaksi.create')->with('error', 'Stok produk tidak mencukupi!');
         }
 
-        $transaksi = Transaksi::create([
-            'id_pelanggan' => $pelanggan->id,
-            'id_produk' => $produk->id,
+        // Hitung total harga
+        $total_harga = $produk->Harga * $request->jumlah;
+
+        // Kurangi stok produk
+        $produk->decrement('Stok', $request->jumlah);
+
+        // Simpan transaksi
+        Transaksi::create([
+            'pelanggan_id' => $request->pelanggan_id,
+            'produk_id' => $request->produk_id,
             'jumlah' => $request->jumlah,
-            'total_harga' => $request->total_harga,
-            'tanggal_transaksi' => $request->tanggal,
+            'total_harga' => $total_harga,
+            'tanggal_transaksi' => now(),
         ]);
 
-        return response()->json(['message' => 'Transaksi berhasil ditambahkan!', 'data' => $transaksi], 201);
+        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil ditambahkan!');
     }
 
-    public function show($id)
+    public function show(Transaksi $transaksi)
     {
-        $transaksi = Transaksi::with('pelanggan', 'produk')->findOrFail($id);
-        return response()->json($transaksi);
+        return view('transaksi.show', compact('transaksi'));
     }
 
-    public function update(Request $request, $id)
+
+    public function destroy(Transaksi $transaksi)
     {
-        $request->validate([
-            'pelanggan' => 'required',
-            'produk' => 'required',
-            'jumlah' => 'required|integer|min:1',
-            'total_harga' => 'required|numeric|min:0',
-            'tanggal' => 'required|date',
-        ]);
+        // Ambil data produk yang terkait dengan transaksi
+        $produk = Produk::findOrFail($transaksi->produk_id);
 
-        $transaksi = Transaksi::findOrFail($id);
-        $pelanggan = Pelanggan::where('NamaPelanggan', $request->pelanggan)->first();
-        $produk = Produk::where('NamaProduk', $request->produk)->first();
+        // Kembalikan stok produk
+        $produk->increment('Stok', $transaksi->jumlah);
 
-        if (!$pelanggan || !$produk) {
-            return response()->json(['message' => 'Pelanggan atau Produk tidak ditemukan!'], 400);
-        }
-
-        $transaksi->update([
-            'id_pelanggan' => $pelanggan->id,
-            'id_produk' => $produk->id,
-            'jumlah' => $request->jumlah,
-            'total_harga' => $request->total_harga,
-            'tanggal_transaksi' => $request->tanggal,
-        ]);
-
-        return response()->json(['message' => 'Transaksi berhasil diperbarui!', 'data' => $transaksi]);
-    }
-
-    public function cetakStruk($id)
-{
-    $transaksi = Transaksi::with(['pelanggan', 'produk'])->findOrFail($id);
-    return view('struk', compact('transaksi'));
-}
-
-
-    public function destroy($id)
-    {
-        $transaksi = Transaksi::findOrFail($id);
+        // Hapus transaksi
         $transaksi->delete();
 
-        return response()->json(['message' => 'Transaksi berhasil dihapus!']);
+        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dibatalkan dan stok dikembalikan!');
     }
 }

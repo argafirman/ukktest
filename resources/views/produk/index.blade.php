@@ -55,6 +55,10 @@
                             <label for="Stok" class="form-label">Stok</label>
                             <input type="number" class="form-control" id="Stok" name="Stok" required>
                         </div>
+                        <div class="mb-3">
+                            <label for="img" class="form-label">Gambar Produk</label>
+                            <input type="file" class="form-control" id="img" name="img" required>
+                        </div>
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </form>
                 </div>
