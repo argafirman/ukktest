@@ -32,17 +32,18 @@
         </table>
     </div>
 
-    <!-- Modal Tambah Produk -->
+    <!-- Modal Tambah/Edit Produk -->
     <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createModalLabel">Tambah Produk</h5>
+                    <h5 class="modal-title" id="createModalLabel">Tambah/Edit Produk</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="createForm">
+                    <form id="createForm" method="POST" enctype="multipart/form-data">
                         @csrf
+                        <input type="hidden" id="formMethod" name="_method" value="POST">
                         <div class="mb-3">
                             <label for="NamaProduk" class="form-label">Nama Produk</label>
                             <input type="text" class="form-control" id="NamaProduk" name="NamaProduk" required>
@@ -57,7 +58,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="img" class="form-label">Gambar Produk</label>
-                            <input type="file" class="form-control" id="img" name="img" required>
+                            <input type="file" class="form-control" id="img" name="img">
                         </div>
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </form>
@@ -86,33 +87,22 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Fungsi tambah/edit produk
         document.getElementById('createForm').addEventListener('submit', function(e) {
             e.preventDefault();
             let formData = new FormData(this);
-            fetch("{{ route('produk.store') }}", {
-                    method: "POST",
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    Swal.fire({
-                        title: "Berhasil!",
-                        text: data.message,
-                        icon: "success",
-                        confirmButtonColor: "#3085d6"
-                    }).then(() => location.reload());
-                })
-                .catch(error => {
-                    Swal.fire({
-                        title: "Gagal!",
-                        text: "Terjadi kesalahan saat menambah produk.",
-                        icon: "error",
-                        confirmButtonColor: "#d33"
-                    });
-                });
+            fetch(this.action, {
+                method: document.getElementById('formMethod').value,
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                Swal.fire("Berhasil!", data.message, "success").then(() => location.reload());
+            })
+            .catch(() => Swal.fire("Gagal!", "Terjadi kesalahan.", "error"));
         });
 
-        // Hapus produk dengan SweetAlert
+        // Fungsi hapus produk
         function deleteProduk(id) {
             Swal.fire({
                 title: "Apakah Anda yakin?",
@@ -126,59 +116,44 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch(`/produk/${id}`, {
-                            method: "DELETE",
-                            headers: {
-                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            Swal.fire({
-                                title: "Berhasil!",
-                                text: data.message,
-                                icon: "success",
-                                confirmButtonColor: "#3085d6"
-                            }).then(() => location.reload());
-                        })
-                        .catch(error => {
-                            Swal.fire({
-                                title: "Gagal!",
-                                text: "Terjadi kesalahan saat menghapus produk.",
-                                icon: "error"
-                            });
-                        });
+                        method: "DELETE",
+                        headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}" }
+                    })
+                    .then(response => response.json())
+                    .then(data => Swal.fire("Berhasil!", data.message, "success").then(() => location.reload()))
+                    .catch(() => Swal.fire("Gagal!", "Terjadi kesalahan.", "error"));
                 }
             });
         }
 
+        // Fungsi detail produk
         function showDetail(id) {
             fetch(`/produk/${id}`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Data Produk:", data);
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('detailImg').src = `/images/${data.img}`;
+                document.getElementById('detailNama').textContent = data.NamaProduk;
+                document.getElementById('detailHarga').textContent = `Rp ${data.Harga}`;
+                document.getElementById('detailStok').textContent = data.Stok;
 
-                    document.getElementById('detailImg').src = data.img;
-                    document.getElementById('detailNama').textContent = data.NamaProduk;
-                    document.getElementById('detailHarga').textContent = data.Harga;
-                    document.getElementById('detailStok').textContent = data.Stok;
-
-                    new bootstrap.Modal(document.getElementById('showModal')).show();
-                })
-                .catch(error => {
-                    console.error("Error mengambil data produk:", error);
-                });
+                new bootstrap.Modal(document.getElementById('showModal')).show();
+            })
+            .catch(() => console.error("Error mengambil data produk"));
         }
 
+        // Fungsi edit produk
         function editProduk(id) {
             fetch(`/produk/${id}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('NamaProduk').value = data.NamaProduk;
-                    document.getElementById('Harga').value = data.Harga;
-                    document.getElementById('Stok').value = data.Stok;
-                    document.getElementById('createForm').action = `/produk/${id}`;
-                    new bootstrap.Modal(document.getElementById('createModal')).show();
-                });
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('NamaProduk').value = data.NamaProduk;
+                document.getElementById('Harga').value = data.Harga;
+                document.getElementById('Stok').value = data.Stok;
+                document.getElementById('createForm').action = `/produk/${id}`;
+                document.getElementById('formMethod').value = 'PUT';
+                new bootstrap.Modal(document.getElementById('createModal')).show();
+            })
+            .catch(() => console.error("Error mengambil data produk"));
         }
     </script>
 @endsection
