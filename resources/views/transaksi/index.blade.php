@@ -32,15 +32,70 @@
                 <td>
                     <a href="{{ route('transaksi.show', $transaksi->id) }}" class="btn btn-info btn-sm">Detail</a>
                     <a href="{{ route('transaksi.edit', $transaksi->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                    <form action="{{ route('transaksi.destroy', $transaksi->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus?');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                    </form>
+                    <button class="btn btn-danger btn-sm delete-button" data-id="{{ $transaksi->id }}">Hapus</button>
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger"
+        },
+        buttonsStyling: false
+    });
+
+
+    
+    // SweetAlert Confirmation for Delete
+    document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', function () {
+            const transaksiId = this.dataset.id;
+
+            swalWithBootstrapButtons.fire({
+                title: "Apakah Anda yakin?",
+                text: "Data ini akan dihapus dan tidak bisa dikembalikan!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Ya, hapus!",
+                cancelButtonText: "Tidak, batalkan!",
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit form programmatically
+                    const form = document.createElement('form');
+                    form.action = `/transaksi/${transaksiId}`;
+                    form.method = 'POST';
+
+                    // Add CSRF and method fields
+                    const csrfField = document.createElement('input');
+                    csrfField.type = 'hidden';
+                    csrfField.name = '_token';
+                    csrfField.value = '{{ csrf_token() }}';
+                    form.appendChild(csrfField);
+
+                    const methodField = document.createElement('input');
+                    methodField.type = 'hidden';
+                    methodField.name = '_method';
+                    methodField.value = 'DELETE';
+                    form.appendChild(methodField);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire({
+                        title: "Dibatalkan",
+                        text: "Data tidak dihapus!",
+                        icon: "error"
+                    });
+                }
+            });
+        });
+    });
+</script>
 @endsection
