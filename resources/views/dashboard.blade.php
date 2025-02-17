@@ -90,79 +90,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Charts Row -->
-        <div class="row mt-4">
-            <!-- Revenue Chart -->
-            <div class="col-md-8">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white">
-                        Revenue Overview
-                    </div>
-                    <div class="card-body">
-                        <canvas id="revenueChart"></canvas>
-                    </div>
-                </div>
             </div>
-
-            <!-- User Growth Chart -->
-            <div class="col-md-4">
-                <div class="card shadow">
-                    <div class="card-header bg-success text-white">
-                        User Growth
-                    </div>
-                    <div class="card-body">
-                        <canvas id="userGrowthChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Activities and Quick Actions -->
-        <div class="row mt-4">
-            <!-- Recent Activities -->
-            <div class="col-md-8">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white">
-                        Recent Activities
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                User John logged in <span class="text-muted float-end">2 hours ago</span>
-                            </li>
-                            <li class="list-group-item">
-                                New order placed <span class="text-muted float-end">5 hours ago</span>
-                            </li>
-                            <li class="list-group-item">
-                                Product updated <span class="text-muted float-end">1 day ago</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="col-md-4">
-                <div class="card shadow">
-                    <div class="card-header bg-warning text-dark">
-                        Quick Actions
-                    </div>
-                    <div class="card-body text-center">
-                        <a href="{{ route('transaksi.index') }}" class="btn btn-primary btn-sm w-100 mb-2">
-                            <i class="fas fa-user-cog me-2"></i> Manage Users
-                        </a>
-                        <a href="{{ route('pelanggan.index') }}" class="btn btn-success btn-sm w-100 mb-2">
-                            <i class="fas fa-box-open me-2"></i> View Orders
-                        </a>
-                        <a href="{{ route('produk.index') }}" class="btn btn-warning btn-sm w-100">
-                            <i class="fas fa-file-alt me-2"></i> Generate Reports
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
