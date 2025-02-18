@@ -10,9 +10,19 @@ use Illuminate\Http\Request;
 class TransaksiController extends Controller
 {
     // Menampilkan daftar transaksi
-    public function index()
+    public function index(Request $request)
     {
         $transaksis = Transaksi::with(['pelanggan', 'produk'])->get();
+
+        $query = Transaksi::query();
+
+    if ($request->has('cari')) {
+        $query->where('NamaPelanggan', 'like', '%' . $request->cari . '%')
+              ->orWhere('Alamat', 'like', '%' . $request->cari . '%')
+              ->orWhere('NomorTelepon', 'like', '%' . $request->cari . '%');
+    }
+
+    $transaksis = $query->get();
         return view('transaksi.index', compact('transaksis'));
     }
 

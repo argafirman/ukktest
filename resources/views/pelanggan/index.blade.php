@@ -1,7 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+
     <div class="container">
+        <form action="{{ route('pelanggan.index') }}" method="GET" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="cari" class="form-control" placeholder="Cari pelanggan..." value="{{ request('cari') }}">
+                <button type="submit" class="btn btn-primary">Cari</button>
+            </div>
+        </form>
         <h1>Daftar Pelanggan</h1>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
             Tambah Pelanggan

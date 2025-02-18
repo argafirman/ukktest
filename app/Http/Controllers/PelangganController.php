@@ -8,11 +8,21 @@ use App\Models\Pelanggan;
 class PelangganController extends Controller
 {
     // Menampilkan daftar pelanggan
-    public function index()
-    {
-        $pelanggans = Pelanggan::all();
-        return view('pelanggan.index', compact('pelanggans'));
+    public function index(Request $request)
+{
+    $query = Pelanggan::query();
+
+    if ($request->has('cari')) {
+        $query->where('NamaPelanggan', 'like', '%' . $request->cari . '%')
+              ->orWhere('Alamat', 'like', '%' . $request->cari . '%')
+              ->orWhere('NomorTelepon', 'like', '%' . $request->cari . '%');
     }
+
+    $pelanggans = $query->get();
+
+    return view('pelanggan.index', compact('pelanggans'));
+}
+
 
     // Menyimpan pelanggan baru
     public function store(Request $request)

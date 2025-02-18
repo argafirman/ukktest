@@ -7,9 +7,18 @@ use App\Models\Produk;
 
 class ProdukController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $produks = Produk::all();
+        $query = Produk::query();
+
+    if ($request->has('cari')) {
+        $query->where('NamaProduk', 'like', '%' . $request->cari . '%')
+              ->orWhere('Harga', 'like', '%' . $request->cari . '%');
+        
+    }
+
+    $produks = $query->get();
         return view('produk.index', compact('produks'));
     }
 
@@ -79,17 +88,18 @@ class ProdukController extends Controller
     }
 
     public function destroy($id)
-    {
-        $produk = Produk::findOrFail($id);
+{
+    $produk = Produk::findOrFail($id);
 
-        // Hapus file gambar jika ada
-        if ($produk->img && file_exists(public_path('images/' . $produk->img))) {
-            unlink(public_path('images/' . $produk->img));
-        }
-
-        $produk->delete();
-
-        return redirect()->route('produk.index')->with('success', 'Produk berhasil dihapus');
+    // Hapus file gambar jika ada
+    if ($produk->img && file_exists(public_path('images/' . $produk->img))) {
+        unlink(public_path('images/' . $produk->img));
     }
+
+    $produk->delete();
+
+    return redirect()->route('produk.index')->with('success', 'Produk berhasil dihapus');
+}
+
 
 }

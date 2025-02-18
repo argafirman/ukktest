@@ -2,13 +2,18 @@
 
 @section('content')
     <div class="container">
+        <form action="{{ route('transaksi.index') }}" method="GET" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="cari" class="form-control" placeholder="Cari pelanggan..." value="{{ request('cari') }}">
+                <button type="submit" class="btn btn-primary">Cari</button>
+            </div>
+        </form>
         <h2>Daftar Transaksi</h2>
         <a href="{{ route('transaksi.create') }}" class="btn btn-primary mb-3">Tambah Transaksi</a>
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-<<<<<<< HEAD
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -24,7 +29,7 @@
         <tbody>
             @foreach ($transaksis as $transaksi)
             <tr>
-                <td>{{ $transaksi->id }}</td>
+                <td>{{ $loop->iteration }}</td>
                 <td>{{ $transaksi->pelanggan->NamaPelanggan }}</td>
                 <td>{{ $transaksi->produk->NamaProduk }}</td>
                 <td>{{ $transaksi->jumlah }}</td>
@@ -99,42 +104,6 @@
         });
     });
 </script>
-=======
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Pelanggan</th>
-                    <th>Produk</th>
-                    <th>Jumlah</th>
-                    <th>Total Harga</th>
-                    <th>Tanggal</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($transaksis as $transaksi)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $transaksi->pelanggan->NamaPelanggan }}</td>
-                        <td>{{ $transaksi->produk->NamaProduk }}</td>
-                        <td>{{ $transaksi->jumlah }}</td>
-                        <td>Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</td>
-                        <td>{{ $transaksi->tanggal_transaksi }}</td>
-                        <td>
-                            <a href="{{ route('transaksi.show', $transaksi->id) }}" class="btn btn-info btn-sm">Detail</a>
-                            <a href="{{ route('transaksi.edit', $transaksi->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            {{-- <form action="{{ route('transaksi.destroy', $transaksi->id) }}" method="POST" class="d-inline"
-                                onsubmit="return confirm('Yakin ingin menghapus?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                            </form> --}}
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
->>>>>>> a0731ad6e143014f453022b2371416c7fafbd869
+
+       
 @endsection
