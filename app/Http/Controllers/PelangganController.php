@@ -9,20 +9,19 @@ class PelangganController extends Controller
 {
     // Menampilkan daftar pelanggan
     public function index(Request $request)
-{
-    $query = Pelanggan::query();
+    {
+        $query = Pelanggan::query();
 
-    if ($request->has('cari')) {
-        $query->where('NamaPelanggan', 'like', '%' . $request->cari . '%')
-              ->orWhere('Alamat', 'like', '%' . $request->cari . '%')
-              ->orWhere('NomorTelepon', 'like', '%' . $request->cari . '%');
+        if ($request->has('cari')) {
+            $query->where('NamaPelanggan', 'like', '%' . $request->cari . '%')
+                ->orWhere('Alamat', 'like', '%' . $request->cari . '%')
+                ->orWhere('NomorTelepon', 'like', '%' . $request->cari . '%');
+        }
+
+        $pelanggans = $query->get();
+
+        return view('pelanggan.index', compact('pelanggans'));
     }
-
-    $pelanggans = $query->get();
-
-    return view('pelanggan.index', compact('pelanggans'));
-}
-
 
     // Menyimpan pelanggan baru
     public function store(Request $request)
@@ -55,7 +54,11 @@ class PelangganController extends Controller
         ]);
 
         $pelanggan = Pelanggan::findOrFail($id);
-        $pelanggan->update($request->all());
+        $pelanggan->update([
+            'NamaPelanggan' => $request->NamaPelanggan,
+            'Alamat' => $request->Alamat,
+            'NomorTelepon' => $request->NomorTelepon,
+        ]);
 
         return response()->json(['message' => 'Pelanggan berhasil diperbarui.']);
     }

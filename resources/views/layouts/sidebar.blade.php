@@ -32,8 +32,8 @@
 
     <li class="nav-item">
         <a class="nav-link" href="{{ route('transaksi.index') }}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Transaksi</span>
+            <i class="fas fa-handshake"></i>
+            <span>Detail Penjualan</span>
         </a>
     </li>
 

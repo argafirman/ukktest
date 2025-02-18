@@ -12,13 +12,13 @@ class ProdukController extends Controller
         $produks = Produk::all();
         $query = Produk::query();
 
-    if ($request->has('cari')) {
-        $query->where('NamaProduk', 'like', '%' . $request->cari . '%')
-              ->orWhere('Harga', 'like', '%' . $request->cari . '%');
-        
-    }
+        if ($request->has('cari')) {
+            $query->where('NamaProduk', 'like', '%' . $request->cari . '%')
+                ->orWhere('Harga', 'like', '%' . $request->cari . '%');
 
-    $produks = $query->get();
+        }
+
+        $produks = $query->get();
         return view('produk.index', compact('produks'));
     }
 
@@ -88,18 +88,24 @@ class ProdukController extends Controller
     }
 
     public function destroy($id)
-{
-    $produk = Produk::findOrFail($id);
+    {
+        $produk = Produk::find($id);
 
-    // Hapus file gambar jika ada
-    if ($produk->img && file_exists(public_path('images/' . $produk->img))) {
-        unlink(public_path('images/' . $produk->img));
+        if (!$produk) {
+            return redirect()->route('produk.index')->with('error', 'Produk tidak ditemukan.');
+        }
+
+        // Hapus gambar produk jika ada
+        if ($produk->img && file_exists(public_path('images/' . $produk->img))) {
+            unlink(public_path('images/' . $produk->img));
+        }
+
+        $produk->delete();
+
+        return redirect()->route('produk.index')->with('success', 'Produk berhasil dihapus!');
     }
 
-    $produk->delete();
 
-    return redirect()->route('produk.index')->with('success', 'Produk berhasil dihapus');
-}
 
 
 }

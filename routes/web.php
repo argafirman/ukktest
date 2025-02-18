@@ -36,10 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('produk', ProdukController::class);
     Route::resource('penjualan', PenjualanController::class);
     Route::resource('transaksi', TransaksiController::class);
-    // Route::get('/transaksi/{id}/edit', [TransaksiController::class, 'edit'])->name('transaksi.edit');
-    // Route::put('/transaksi/{id}', [TransaksiController::class, 'update'])->name('transaksi.update');
-
-    Route::get('/transaksi/{id}/struk', [TransaksiController::class, 'cetakStruk'])->name('transaksi.struk');
+    
     
 });
 

@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-
     <div class="container">
         <form action="{{ route('pelanggan.index') }}" method="GET" class="mb-3">
             <div class="input-group">
-                <input type="text" name="cari" class="form-control" placeholder="Cari pelanggan..." value="{{ request('cari') }}">
+                <input type="text" name="cari" class="form-control" placeholder="Cari pelanggan..."
+                    value="{{ request('cari') }}">
                 <button type="submit" class="btn btn-primary">Cari</button>
             </div>
         </form>
@@ -100,7 +100,8 @@
                         @method('PUT')
                         <div class="mb-3">
                             <label for="editNamaPelanggan" class="form-label">Nama Pelanggan</label>
-                            <input type="text" class="form-control" id="editNamaPelanggan" name="NamaPelanggan" required>
+                            <input type="text" class="form-control" id="editNamaPelanggan" name="NamaPelanggan"
+                                required>
                         </div>
                         <div class="mb-3">
                             <label for="editAlamat" class="form-label">Alamat</label>
@@ -202,11 +203,14 @@
             fetch(`/pelanggan/${id}`)
                 .then(response => response.json())
                 .then(data => {
+                    document.getElementById('editId').value = data.id;
                     document.getElementById('editNamaPelanggan').value = data.NamaPelanggan;
                     document.getElementById('editAlamat').value = data.Alamat;
                     document.getElementById('editNomorTelepon').value = data.NomorTelepon;
-                    document.getElementById('editForm').action = `/pelanggan/${id}`;
-                    new bootstrap.Modal(document.getElementById('editModal')).show();
+
+                    // Tampilkan modal edit
+                    let editModal = new bootstrap.Modal(document.getElementById('editModal'));
+                    editModal.show();
                 });
         }
     </script>
