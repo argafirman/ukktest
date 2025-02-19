@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class ProdukController extends Controller
+class AdminProdukController extends Controller
 {
     public function index(Request $request)
     {
@@ -20,12 +20,12 @@ class ProdukController extends Controller
         }
 
         $produks = $query->get();
-        return view('produk.index', compact('produks'));
+        return view('Admin.produk.index', compact('produks'));
     }
 
     public function create()
     {
-        return view('produk.create');
+        return view('Admin.produk.create');
     }
 
     public function store(Request $request)
@@ -47,13 +47,13 @@ class ProdukController extends Controller
             'img' => $imageName,
         ]);
 
-        return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan.');
+        return redirect()->route('adminproduk.index')->with('success', 'Produk berhasil ditambahkan.');
     }
 
     public function edit($id)
     {
         $produk = Produk::findOrFail($id);
-        return view('produk.edit', compact('produk'));
+        return view('Admin.produk.edit', compact('produk'));
     }
 
     public function update(Request $request, $id)
@@ -79,20 +79,20 @@ class ProdukController extends Controller
             'Stok' => $request->Stok,
         ]);
 
-        return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui.');
+        return redirect()->route('adminproduk.index')->with('success', 'Produk berhasil diperbarui.');
     }
 
     public function show($id)
     {
         $produk = Produk::findOrFail($id);
-        return view('produk.show', compact('produk'));
+        return view('Admin.produk.show', compact('produk'));
     }
 
-     public function destroy($id)
+    public function destroy($id)
     {
         $produk = Produk::find($id);
         if (!$produk) {
-            return redirect()->route('produk.index')->with('error', 'Produk tidak ditemukan.');
+            return redirect()->route('adminproduk.index')->with('error', 'Produk tidak ditemukan.');
         }
 
         // Hapus gambar produk jika ada
@@ -101,7 +101,7 @@ class ProdukController extends Controller
         }
 
         $produk->delete();
-        return redirect()->route('produk.index')->with('success', 'Produk berhasil dihapus!');
+        return redirect()->route('adminproduk.index')->with('success', 'Produk berhasil dihapus!');
     }
 
 

@@ -3,9 +3,11 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PelangganController;
-use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\Admin\AdminPelangganController;
+use App\Http\Controllers\Admin\AdminProdukController;
 use App\Http\Controllers\PenjualanController;
-use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\Admin\AdminTransaksiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,9 +37,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('pelanggan', PelangganController::class);
     Route::resource('produk', ProdukController::class);
     Route::resource('penjualan', PenjualanController::class);
-    Route::resource('transaksi', TransaksiController::class);
-    
-    
+
+
+
+});
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('adminpelanggan', AdminPelangganController::class);
+    Route::resource('adminproduk', AdminProdukController::class);
+    Route::resource('admintransaksi', AdminTransaksiController::class);
 });
 
 

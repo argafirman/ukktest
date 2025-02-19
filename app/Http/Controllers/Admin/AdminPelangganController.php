@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Pelanggan;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class PelangganController extends Controller
+class AdminPelangganController extends Controller
 {
     // Menampilkan daftar pelanggan
     public function index(Request $request)
@@ -21,7 +21,7 @@ class PelangganController extends Controller
 
         $pelanggans = $query->get();
 
-        return view('pelanggan.index', compact('pelanggans'));
+        return view('Admin.pelanggan.index', compact('pelanggans'));
     }
 
     // Menyimpan pelanggan baru

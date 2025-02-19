@@ -31,7 +31,7 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('transaksi.index') }}">
+        <a class="nav-link" href="{{ route('admin.admintransaksi.index') }}">
             <i class="fas fa-handshake"></i>
             <span>Detail Penjualan</span>
         </a>

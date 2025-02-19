@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Transaksi;
-use App\Models\Pelanggan;
 use App\Models\Produk;
+use App\Models\Pelanggan;
+use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
-class TransaksiController extends Controller
+class AdminTransaksiController extends Controller
 {
     // Menampilkan daftar transaksi
     public function index(Request $request)
