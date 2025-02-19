@@ -51,7 +51,7 @@
 
             <!-- Tombol Kembali -->
             <div class="text-center mt-3">
-                <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">Kembali</a>
+                <a href="{{ route('admin.transaksi.index') }}" class="btn btn-secondary">Kembali</a>
             </div>
         </div>
     </div>

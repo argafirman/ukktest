@@ -12,7 +12,7 @@
             <p><strong>Harga:</strong> Rp {{ number_format($produk->Harga, 2, ',', '.') }}</p>
             <p><strong>Stok:</strong> {{ $produk->Stok }} pcs</p>
 
-            <a href="{{ route('produk.index') }}" class="btn btn-secondary">Kembali</a>
+            <a href="{{ route('admin.produk.index') }}" class="btn btn-secondary">Kembali</a>
         </div>
     </div>
 </div>

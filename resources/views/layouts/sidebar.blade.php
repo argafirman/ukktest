@@ -15,33 +15,40 @@
         </a>
     </li>
 
+    @if(auth()->user()->role == 'admin')
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.produk.index') }}">
+                <i class="fas fa-box"></i>
+                <span>Produk</span>
+            </a>
+        </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('produk.index') }}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Produk</span>
-        </a>
-    </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.pelanggan.index') }}">
+                <i class="fas fa-users"></i>
+                <span>Pelanggan</span>
+            </a>
+        </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('pelanggan.index') }}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Pelanggan</span>
-        </a>
-    </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.transaksi.index') }}">
+                <i class="fas fa-handshake"></i>
+                <span>Detail Penjualan</span>
+            </a>
+        </li>
+    @else
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('produk.index') }}">
+                <i class="fas fa-box"></i>
+                <span>Produk</span>
+            </a>
+        </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('admin.admintransaksi.index') }}">
-            <i class="fas fa-handshake"></i>
-            <span>Detail Penjualan</span>
-        </a>
-    </li>
-
-
-    {{-- <li class="nav-item">
-        <a class="nav-link" href="{{ route('users.index') }}">
-            <i class="fas fa-fw fa-users"></i>
-            <span>Users</span>
-        </a>
-    </li> --}}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('pelanggan.index') }}">
+                <i class="fas fa-users"></i>
+                <span>Pelanggan</span>
+            </a>
+        </li>
+    @endif
 </ul>

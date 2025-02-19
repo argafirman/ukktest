@@ -21,7 +21,7 @@ class AdminPelangganController extends Controller
 
         $pelanggans = $query->get();
 
-        return view('Admin.pelanggan.index', compact('pelanggans'));
+        return view('admin.pelanggan.index', compact('pelanggans'));
     }
 
     // Menyimpan pelanggan baru

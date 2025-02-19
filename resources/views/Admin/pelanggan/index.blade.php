@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <form action="{{ route('pelanggan.index') }}" method="GET" class="mb-3">
+        <form action="{{ route('admin.pelanggan.index') }}" method="GET" class="mb-3">
             <div class="input-group">
                 <input type="text" name="cari" class="form-control" placeholder="Cari pelanggan..."
                     value="{{ request('cari') }}">

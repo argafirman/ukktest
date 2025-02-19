@@ -4,7 +4,7 @@
     <div class="container">
         <h2>Tambah Produk</h2>
 
-        <form action="{{ route('produk.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.produk.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label for="NamaProduk" class="form-label">Nama Produk</label>
@@ -23,7 +23,7 @@
                 <input type="file" class="form-control" name="img" required>
             </div>
             <button type="submit" class="btn btn-primary">Simpan</button>
-            <a href="{{ route('produk.index') }}" class="btn btn-secondary">Batal</a>
+            <a href="{{ route('admin.produk.index') }}" class="btn btn-secondary">Batal</a>
         </form>
     </div>
 @endsection

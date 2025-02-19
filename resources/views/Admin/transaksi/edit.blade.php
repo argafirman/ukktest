@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h2>Edit Transaksi</h2>
-    <form id="editTransaksiForm" action="{{ route('transaksi.update', $transaksi->id) }}" method="POST">
+    <form id="editTransaksiForm" action="{{ route('admin.transaksi.update', $transaksi->id) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="mb-3">
@@ -31,7 +31,7 @@
             <input type="number" name="jumlah" class="form-control" value="{{ $transaksi->jumlah }}" min="1" required>
         </div>
         <button type="button" id="updateButton" class="btn btn-primary">Update</button>
-        <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">Batal</a>
+        <a href="{{ route('admin.transaksi.index') }}" class="btn btn-secondary">Batal</a>
     </form>
 </div>
 

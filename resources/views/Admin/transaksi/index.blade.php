@@ -2,14 +2,14 @@
 
 @section('content')
     <div class="container">
-        <form action="{{ route('transaksi.index') }}" method="GET" class="mb-3">
+        <form action="{{ route('admin.transaksi.index') }}" method="GET" class="mb-3">
             <div class="input-group">
                 <input type="text" name="cari" class="form-control" placeholder="Cari pelanggan..." value="{{ request('cari') }}">
                 <button type="submit" class="btn btn-primary">Cari</button>
             </div>
         </form>
         <h2>Daftar Transaksi</h2>
-        <a href="{{ route('transaksi.create') }}" class="btn btn-primary mb-3">Tambah Transaksi</a>
+        <a href="{{ route('admin.transaksi.create') }}" class="btn btn-primary mb-3">Tambah Transaksi</a>
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
@@ -36,8 +36,8 @@
                 <td>Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</td>
                 <td>{{ $transaksi->tanggal_transaksi }}</td>
                 <td>
-                    <a href="{{ route('transaksi.show', $transaksi->id) }}" class="btn btn-info btn-sm">Cetak Struk</a>
-                    <a href="{{ route('transaksi.edit', $transaksi->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{{ route('admin.transaksi.show', $transaksi->id) }}" class="btn btn-info btn-sm">Cetak Struk</a>
+                    <a href="{{ route('admin.transaksi.edit', $transaksi->id) }}" class="btn btn-warning btn-sm">Edit</a>
                     <button class="btn btn-danger btn-sm delete-button" data-id="{{ $transaksi->id }}">Hapus</button>
                 </td>
             </tr>

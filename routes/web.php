@@ -18,7 +18,7 @@ use App\Http\Controllers\Admin\AdminTransaksiController;
 
 // Halaman utama
 Route::get('/', function () {
-    return view('welcome');
+    return view('landingpage');
 });
 
 // Dashboard (hanya untuk user yang sudah login dan terverifikasi)
@@ -43,9 +43,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('adminpelanggan', AdminPelangganController::class);
-    Route::resource('adminproduk', AdminProdukController::class);
-    Route::resource('admintransaksi', AdminTransaksiController::class);
+    Route::resource('pelanggan', AdminPelangganController::class);
+    Route::resource('produk', AdminProdukController::class);
+    Route::resource('transaksi', AdminTransaksiController::class);
 });
 
 

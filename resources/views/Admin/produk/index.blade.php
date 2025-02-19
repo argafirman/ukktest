@@ -2,7 +2,18 @@
 
 @section('content')
     <div class="container">
-        // ...
+    <form action="{{ route('admin.produk.index') }}" method="GET" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="cari" class="form-control" placeholder="Cari pelanggan..."
+                    value="{{ request('cari') }}">
+                <button type="submit" class="btn btn-primary">Cari</button>
+            </div>
+        </form>
+        <h2>Daftar Transaksi</h2>
+        <a href="{{ route('admin.produk.create') }}" class="btn btn-primary mb-3">Tambah Transaksi</a>
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
 
         <table class="table table-bordered">
             <thead>
@@ -24,10 +35,10 @@
                     <td>Rp {{ number_format($produk->Harga, 0, ',', '.') }}</td>
                     <td>{{ $produk->Stok }}</td>
                     <td>
-                        <a href="{{ route('produk.show', $produk->id) }}" class="btn btn-info btn-sm">Detail</a>
-                        <a href="{{ route('produk.edit', $produk->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ route('admin.produk.show', $produk->id) }}" class="btn btn-info btn-sm">Detail</a>
+                        <a href="{{ route('admin.produk.edit', $produk->id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <button class="btn btn-danger btn-sm" onclick="hapusProduk({{ $produk->id }})">Hapus</button>
-                        <form id="delete-form-{{ $produk->id }}" action="{{ route('produk.destroy', $produk->id) }}" method="POST" style="display: none;">
+                        <form id="delete-form-{{ $produk->id }}" action="{{ route('admin.produk.destroy', $produk->id) }}" method="POST" style="display: none;">
                             @csrf
                             @method('DELETE')
                         </form>

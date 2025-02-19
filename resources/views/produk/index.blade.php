@@ -2,7 +2,18 @@
 
 @section('content')
     <div class="container">
-        // ...
+    <form action="{{ route('produk.index') }}" method="GET" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="cari" class="form-control" placeholder="Cari pelanggan..."
+                    value="{{ request('cari') }}">
+                <button type="submit" class="btn btn-primary">Cari</button>
+            </div>
+        </form>
+        <h2>Daftar Transaksi</h2>
+        <a href="{{ route('produk.create') }}" class="btn btn-primary mb-3">Tambah Transaksi</a>
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
 
         <table class="table table-bordered">
             <thead>
