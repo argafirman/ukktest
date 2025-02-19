@@ -10,10 +10,10 @@
             </div>
         </form>
         <h2>Daftar Transaksi</h2>
-        <a href="{{ route('produk.create') }}" class="btn btn-primary mb-3">Tambah Transaksi</a>
+        <!-- <a href="{{ route('produk.create') }}" class="btn btn-primary mb-3">Tambah Transaksi</a>
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
+        @endif -->
 
         <table class="table table-bordered">
             <thead>
@@ -23,7 +23,7 @@
                     <th>Nama</th>
                     <th>Harga</th>
                     <th>Stok</th>
-                    <th>Aksi</th>
+                    <!-- <th>Aksi</th> -->
                 </tr>
             </thead>
             <tbody>
@@ -34,7 +34,7 @@
                     <td>{{ $produk->NamaProduk }}</td>
                     <td>Rp {{ number_format($produk->Harga, 0, ',', '.') }}</td>
                     <td>{{ $produk->Stok }}</td>
-                    <td>
+                    <!-- <td>
                         <a href="{{ route('produk.show', $produk->id) }}" class="btn btn-info btn-sm">Detail</a>
                         <a href="{{ route('produk.edit', $produk->id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <button class="btn btn-danger btn-sm" onclick="hapusProduk({{ $produk->id }})">Hapus</button>
@@ -42,7 +42,7 @@
                             @csrf
                             @method('DELETE')
                         </form>
-                    </td>
+                    </td> -->
                 </tr>
                 @endforeach
             </tbody>
