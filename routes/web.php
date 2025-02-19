@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminProdukController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\Admin\AdminTransaksiController;
+use App\Http\Controllers\TransaksiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('pelanggan', PelangganController::class);
     Route::resource('produk', ProdukController::class);
     Route::resource('penjualan', PenjualanController::class);
+    Route::resource('transaksi', TransaksiController::class);
 
 
 

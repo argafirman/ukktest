@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Models\Produk;
 use App\Models\Pelanggan;
@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 
-class AdminTransaksiController extends Controller
+class TransaksiController extends Controller
 {
     // Menampilkan daftar transaksi
     public function index(Request $request)
@@ -25,7 +25,7 @@ class AdminTransaksiController extends Controller
         }
 
         $transaksis = $query->get();
-        return view('admin.transaksi.index', compact('transaksis'));
+        return view('transaksi.index', compact('transaksis'));
     }
 
     // Menampilkan form untuk membuat transaksi baru
@@ -33,7 +33,7 @@ class AdminTransaksiController extends Controller
     {
         $pelanggans = Pelanggan::all();
         $produks = Produk::all();
-        return view('admin.transaksi.create', compact('pelanggans', 'produks'));
+        return view('transaksi.create', compact('pelanggans', 'produks'));
     }
 
     // Menyimpan data transaksi baru
@@ -59,7 +59,7 @@ class AdminTransaksiController extends Controller
             'tanggal_transaksi' => now(),
         ]);
 
-        return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi menunggu persetujuan!');
+        return redirect()->route('transaksi.index')->with('success', 'Transaksi menunggu persetujuan!');
     }
 
     // Menyetujui transaksi
@@ -75,7 +75,7 @@ class AdminTransaksiController extends Controller
         $produk->decrement('Stok', $transaksi->jumlah);
         $transaksi->update(['status' => 'approved']);
 
-        return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi disetujui!');
+        return redirect()->route('transaksi.index')->with('success', 'Transaksi disetujui!');
     }
 
     // Menampilkan form untuk mengedit transaksi
@@ -84,7 +84,7 @@ class AdminTransaksiController extends Controller
         $transaksi = Transaksi::findOrFail($id);
         $pelanggans = Pelanggan::all();
         $produks = Produk::all();
-        return view('admin.transaksi.edit', compact('transaksi', 'pelanggans', 'produks'));
+        return view('transaksi.edit', compact('transaksi', 'pelanggans', 'produks'));
     }
 
     // Memperbarui data transaksi
@@ -115,13 +115,13 @@ class AdminTransaksiController extends Controller
             'total_harga' => $total_harga,
         ]);
 
-        return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil diperbarui!');
+        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil diperbarui!');
     }
 
     // Menampilkan detail transaksi
     public function show(Transaksi $transaksi)
     {
-        return view('admin.transaksi.show', compact('transaksi'));
+        return view('transaksi.show', compact('transaksi'));
     }
 
     // Menghapus transaksi dan mengembalikan stok
@@ -132,6 +132,6 @@ class AdminTransaksiController extends Controller
 
         $transaksi->delete();
 
-        return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil dibatalkan dan stok dikembalikan!');
+        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dibatalkan dan stok dikembalikan!');
     }
 }

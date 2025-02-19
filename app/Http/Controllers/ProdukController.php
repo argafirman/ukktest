@@ -21,6 +21,7 @@ class ProdukController extends Controller
 
         $produks = $query->get();
         return view('produk.index', compact('produks'));
+
     }
 
     public function create()
@@ -29,26 +30,29 @@ class ProdukController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'NamaProduk' => 'required',
-            'Harga' => 'required|numeric',
-            'Stok' => 'required|integer',
-            'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
+{
+    $request->validate([
+        'produk_id' => 'required|exists:produks,id',
+        'jumlah' => 'required|integer|min:1',
+    ]);
 
-        $imageName = time() . '.' . $request->img->extension();
-        $request->img->move(public_path('images'), $imageName);
+    $produk = Produk::findOrFail($request->produk_id);
 
-        Produk::create([
-            'NamaProduk' => $request->NamaProduk,
-            'Harga' => $request->Harga,
-            'Stok' => $request->Stok,
-            'img' => $imageName,
-        ]);
-
-        return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan.');
+    if ($produk->Stok < $request->jumlah) {
+        return redirect()->back()->with('error', 'Stok tidak cukup!');
     }
+
+    Transaksi::create([
+        'pelanggan_id' => auth()->user()->id,
+        'produk_id' => $request->produk_id,
+        'jumlah' => $request->jumlah,
+        'total_harga' => $produk->Harga * $request->jumlah,
+        'status' => 'pending', // Menunggu persetujuan admin
+        'tanggal_transaksi' => now(),
+    ]);
+
+    return redirect()->route('admin.transaksi.index')->with('success', 'Menunggu persetujuan admin!');
+}
 
     public function edit($id)
     {
