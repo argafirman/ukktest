@@ -3,35 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satria Bakery</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Bakeryza</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            
+            font-family: 'Girl Sans Ultra Bold Condensed';
+        }
+        .banner {
+            width: 90%;
+            max-width: 1200px;
+            background: #FFF;
+            text-align: center;
+            padding: 50px 0x;
+            position: relative;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-image : url('{{ asset('images/wa.jpg') }}') ;
+        }
+        .title {
+            background-color :#6D4C41;
+            font-size: 60px;
+            font-weight: bold;
+            color:rgb(237, 227, 224);
+            
+        }
+        .subtitle {
+            font-size: 30px;
+            color: #A0522D;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .contact {
+            font-size: 18px;
+            color: #FFF;
+            background-color: #6D4C41;
+            border-radius: 50px;
+            display: inline-block;
+
+            a {
+                color: white;
+                text-decoration: none;
+
+                &:hover {
+                    color: pink;
+                }
+            }
+        }
+        .info {
+            font-size: 18px;
+            color: #6D4C41;
+            margin-top: 20px;
+        }
+        .price {
+            background: #6D4C41;
+            color: #FFF;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 22px;
+            margin-top: 20px;
+            display: inline-block;
+            border: 0px solid white;
+        }
+
+        footer {
+            margin: 1em 0;
+            padding: 1em;
+            background-color: #6D4C41;
+        }
+    </style>
 </head>
-<body class="bg-[#4E2B24] text-[#F3D9B1]">
-    <header class="flex justify-between items-center p-5">
-        <div class="flex items-center space-x-2">
-        <img src="/images/logo roti.png" class="h-20 w-auto">
-            <span class="text-lg font-semibold">SATRIA BAKERY</span>
-        </div>
-        <nav class="flex space-x-6 relative top-[-8px]">
-        <a href="{{ route('login') }}" class="hover:text-[#E4B97F]">Login</a>
-            <a href="{{ route('register') }}" class="hover:text-[#E4B97F]">Registrasi</a>
-        </nav>
-    </header>
-
-    <section class="flex flex-col md:flex-row items-center justify-center py-8 px-6 md:px-20 -mt-10">
-        <div class="w-full md:w-1/2 space-y-4 relative top-[-40px]">
-            <h1 class="text-5xl font-bold">WELCOME</h1>
-            <h2 class="text-6xl font-bold">LINN BAKERY</h2>
-            <p> Kami menyediakan berbagai jenis roti dan kue berkualitas dengan rasa terbaik. 
-            Nikmati kelezatan roti yang baru dipanggang setiap hari!
-        </div>
-        <div class="w-full md:w-1/2">
-            <img src="/images/roti molen.png" alt="Roti">
-        </div>
-    </section>
-
-    <footer class="text-center py-4 text-sm">
-        &copy; 2025 Linn Bakery. All Rights Reserved.
-    </footer>
+<body>
+    <div class="banner">
+        <h1 class="title">  Welcome to Bakeryza</h1>
+        <div class="gambar">
+        <img src="{{asset('images/pp.jpg') }}" width="500" height="255" alt="Bakery Items">
+    
+    </div>
+        <p class="subtitle">Freshly Baked, Straight to Your Heart!</p>
+        <button class="price">Order Now!</button>
+        
+        <footer>
+            <div class="contact"> 
+                <a href="https://wa.me/qr/3PEW6CEOX2YEL1">📞 Delivery: 0858-5538-6043</a> | 🏠 Balen, Bojonegoro - Jawa Timur |            </div>
+        </footer>
+        
+    </div>
 </body>
 </html>

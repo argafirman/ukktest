@@ -39,6 +39,7 @@ class TransaksiController extends Controller
     // Menyimpan data transaksi baru
     public function store(Request $request)
 {
+    
     $request->validate([
         'produk_id' => 'required|exists:produks,id',
         'pelanggan_id' => 'required|exists:pelanggans,id',
