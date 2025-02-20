@@ -41,40 +41,56 @@ class TransaksiController extends Controller
 {
     $request->validate([
         'produk_id' => 'required|exists:produks,id',
-        'pelanggan_id' => 'required|exists:pelanggans,id',  // Validasi pelanggan
+        'pelanggan_id' => 'required|exists:pelanggans,id',
         'jumlah' => 'required|integer|min:1',
+        'uang_diberikan' => 'required|numeric|min:0',
+        
     ]);
 
-    // Ambil pelanggan_id dari input form
-    $pelanggan_id = $request->pelanggan_id;
-
-    // Ambil produk berdasarkan produk_id
     $produk = Produk::findOrFail($request->produk_id);
 
-    // Periksa apakah stok cukup
     if ($produk->Stok < $request->jumlah) {
         return redirect()->back()->with('error', 'Stok tidak cukup!');
     }
 
-    // Kurangi stok produk
+    $total_harga = $produk->Harga * $request->jumlah;
+    $uang_diberikan = (float) $request->uang_diberikan; // Konversi ke float
+    $kembalian = $uang_diberikan - $total_harga;
+
+    if ($kembalian < 0) {
+        return redirect()->back()->with('error', 'Uang yang diberikan tidak cukup!');
+    }
+
     $produk->decrement('Stok', $request->jumlah);
 
-    // Simpan transaksi
-    Transaksi::create([
-        'pelanggan_id' => $pelanggan_id,
+    // Debug sebelum menyimpan
+    ([
+        'pelanggan_id' => $request->pelanggan_id,
         'produk_id' => $request->produk_id,
         'jumlah' => $request->jumlah,
-        'total_harga' => $produk->Harga * $request->jumlah,
+        'total_harga' => $total_harga,
+        'uang_diberikan' => $uang_diberikan,
+        'kembalian' => $kembalian,
         'tanggal_transaksi' => now(),
     ]);
 
-    return redirect()->route('transaksi.index')->with('success', 'Transaksi menunggu persetujuan!');
+    Transaksi::create([
+        'pelanggan_id' => $request->pelanggan_id,
+        'produk_id' => $request->produk_id,
+        'jumlah' => $request->jumlah,
+        'total_harga' => $total_harga,
+        'uang_diberikan' => $uang_diberikan,
+        'kembalian' => $kembalian,
+        'tanggal_transaksi' => now(),
+    ]);
+
+    return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil!');
 }
 
 
-    // Menyetujui transaksi
 
-    // Menampilkan form untuk mengedit transaksi
+
+   
     public function edit($id)
     {
         $transaksi = Transaksi::findOrFail($id);
