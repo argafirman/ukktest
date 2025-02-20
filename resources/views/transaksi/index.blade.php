@@ -36,8 +36,8 @@
                 <td>Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</td>
                 <td>{{ $transaksi->tanggal_transaksi }}</td>
                 <td>
-                    <a href="{{ route('transaksi.show', $transaksi->id) }}" class="btn btn-info btn-sm">Cetak Struk</a>
-                    <a href="{{ route('transaksi.edit', $transaksi->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{{ route('transaksi.show', $transaksi->id) }}" class="btn btn-info btn-sm">Detail</a>
+                    {{-- <a href="{{ route('transaksi.edit', $transaksi->id) }}" class="btn btn-warning btn-sm">Edit</a> --}}
                     <button class="btn btn-danger btn-sm delete-button" data-id="{{ $transaksi->id }}">Hapus</button>
                 </td>
             </tr>

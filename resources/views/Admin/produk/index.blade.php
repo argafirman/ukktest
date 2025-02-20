@@ -9,8 +9,8 @@
                 <button type="submit" class="btn btn-primary">Cari</button>
             </div>
         </form>
-        <h2>Daftar Transaksi</h2>
-        <a href="{{ route('admin.produk.create') }}" class="btn btn-primary mb-3">Tambah Transaksi</a>
+        <h2>Daftar Produk</h2>
+        <a href="{{ route('admin.produk.create') }}" class="btn btn-primary mb-3">Tambah Produk</a>
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
@@ -48,6 +48,8 @@
             </tbody>
         </table>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         function hapusProduk(id) {

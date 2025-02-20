@@ -3,18 +3,17 @@
 @section('content')
 <div class="container">
     <h2>Edit Transaksi</h2>
-    <form id="editTransaksiForm" action="{{ route('admin.transaksi.update', $transaksi->id) }}" method="POST">
+    <form id="editTransaksiForm" action="{{ route('transaksi.update', $transaksi->id) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="mb-3">
-            <label>Pelanggan</label>
-            <select name="pelanggan_id" class="form-control" required>
-                @foreach ($pelanggans as $pelanggan)
-                <option value="{{ $pelanggan->id }}" {{ $transaksi->pelanggan_id == $pelanggan->id ? 'selected' : '' }}>
-                    {{ $pelanggan->NamaPelanggan }}
-                </option>
-                @endforeach
-            </select>
+            <label for="NamaPelanggan" class="form-label">Nama Pelanggan</label>
+            <input type="text" class="form-control @error('NamaPelanggan') is-invalid @enderror"
+                   name="NamaPelanggan" value="{{ old('NamaPelanggan', $pelanggan->NamaPelanggan) }}">
+            @error('NamaPelanggan')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>elect>
         </div>
         <div class="mb-3">
             <label>Produk</label>
@@ -31,7 +30,7 @@
             <input type="number" name="jumlah" class="form-control" value="{{ $transaksi->jumlah }}" min="1" required>
         </div>
         <button type="button" id="updateButton" class="btn btn-primary">Update</button>
-        <a href="{{ route('admin.transaksi.index') }}" class="btn btn-secondary">Batal</a>
+        <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">Batal</a>
     </form>
 </div>
 

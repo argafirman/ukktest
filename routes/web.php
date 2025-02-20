@@ -9,6 +9,7 @@ use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\Admin\AdminTransaksiController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\StrukController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('produk', ProdukController::class);
     Route::resource('penjualan', PenjualanController::class);
     Route::resource('transaksi', TransaksiController::class);
+    Route::get('/struk/cetak/{id}', [StrukController::class, 'cetak'])->name('struk.cetak');
 
 
 

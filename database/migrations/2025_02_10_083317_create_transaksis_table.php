@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->integer('jumlah');
             $table->decimal('total_harga', 10, 2);
             $table->date('tanggal_transaksi');
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamps();
         });
     }

@@ -4,14 +4,14 @@
 <div class="container">
     <div class="card">
         <div class="card-body">
-            <h2 class="text-center mb-4">Struk Transaksi</h2>
+            <h2 class="text-center mb-4">Table Transaksi</h2>
 
             <!-- Info Toko -->
-            <div class="text-center mb-4">
+            {{-- <div class="text-center mb-4">
                 <h4>Toko Kami Ambatukam</h4>
-                <p>Jalan Raya Roti Jala Maklima Biadap </p>
+                <p>Jalan Raya Roti Jala Maklima Biadap</p>
                 <p>Telp: (0123) 456-789</p>
-            </div>
+            </div> --}}
 
             <!-- Informasi Transaksi -->
             <table class="table table-borderless">
@@ -44,14 +44,16 @@
             <hr>
 
             <!-- Pesan Terima Kasih -->
-            <div class="text-center mt-4">
+            {{-- <div class="text-center mt-4">
                 <h5>Terima Kasih Telah Berbelanja!</h5>
                 <p>Silakan datang kembali.</p>
-            </div>
+            </div> --}}
 
             <!-- Tombol Kembali -->
             <div class="text-center mt-3">
-                <a href="{{ route('admin.transaksi.index') }}" class="btn btn-secondary">Kembali</a>
+                <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">Kembali</a>
+                <!-- Tombol untuk Cetak Struk -->
+                {{-- <a href="{{ route('struk.cetak', $transaksi->id) }}" class="btn btn-primary" target="_blank">Cetak Struk</a> --}}
             </div>
         </div>
     </div>

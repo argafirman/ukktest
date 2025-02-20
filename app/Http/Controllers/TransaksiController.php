@@ -38,45 +38,41 @@ class TransaksiController extends Controller
 
     // Menyimpan data transaksi baru
     public function store(Request $request)
-    {
-        $request->validate([
-            'produk_id' => 'required|exists:produks,id',
-            'jumlah' => 'required|integer|min:1',
-        ]);
+{
+    $request->validate([
+        'produk_id' => 'required|exists:produks,id',
+        'pelanggan_id' => 'required|exists:pelanggans,id',  // Validasi pelanggan
+        'jumlah' => 'required|integer|min:1',
+    ]);
 
-        $produk = Produk::findOrFail($request->produk_id);
+    // Ambil pelanggan_id dari input form
+    $pelanggan_id = $request->pelanggan_id;
 
-        if ($produk->Stok < $request->jumlah) {
-            return redirect()->back()->with('error', 'Stok tidak cukup!');
-        }
+    // Ambil produk berdasarkan produk_id
+    $produk = Produk::findOrFail($request->produk_id);
 
-        Transaksi::create([
-            'pelanggan_id' => Auth::id(),
-            'produk_id' => $request->produk_id,
-            'jumlah' => $request->jumlah,
-            'total_harga' => $produk->Harga * $request->jumlah,
-            'status' => 'pending',
-            'tanggal_transaksi' => now(),
-        ]);
-
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi menunggu persetujuan!');
+    // Periksa apakah stok cukup
+    if ($produk->Stok < $request->jumlah) {
+        return redirect()->back()->with('error', 'Stok tidak cukup!');
     }
+
+    // Kurangi stok produk
+    $produk->decrement('Stok', $request->jumlah);
+
+    // Simpan transaksi
+    Transaksi::create([
+        'pelanggan_id' => $pelanggan_id,
+        'produk_id' => $request->produk_id,
+        'jumlah' => $request->jumlah,
+        'total_harga' => $produk->Harga * $request->jumlah,
+        'tanggal_transaksi' => now(),
+    ]);
+
+    return redirect()->route('transaksi.index')->with('success', 'Transaksi menunggu persetujuan!');
+}
+
 
     // Menyetujui transaksi
-    public function approve($id)
-    {
-        $transaksi = Transaksi::findOrFail($id);
-        $produk = Produk::findOrFail($transaksi->produk_id);
-
-        if ($produk->Stok < $transaksi->jumlah) {
-            return redirect()->back()->with('error', 'Stok tidak cukup untuk menyetujui transaksi!');
-        }
-
-        $produk->decrement('Stok', $transaksi->jumlah);
-        $transaksi->update(['status' => 'approved']);
-
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi disetujui!');
-    }
 
     // Menampilkan form untuk mengedit transaksi
     public function edit($id)
@@ -91,33 +87,36 @@ class TransaksiController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'pelanggan_id' => 'required|exists:pelanggans,id',
+            'pelanggan_id' => 'required|exists:pelanggans,id',  // Validasi pelanggan
             'produk_id' => 'required|exists:produks,id',
             'jumlah' => 'required|integer|min:1',
         ]);
-
+    
         $transaksi = Transaksi::findOrFail($id);
         $oldProduk = Produk::findOrFail($transaksi->produk_id);
+    
+        // Kembalikan stok produk lama sebelum mengubah transaksi
         $oldProduk->increment('Stok', $transaksi->jumlah);
-
+    
         $newProduk = Produk::findOrFail($request->produk_id);
         if ($newProduk->Stok < $request->jumlah) {
             return redirect()->back()->with('error', 'Stok tidak mencukupi!');
         }
-
+    
+        // Kurangi stok produk baru
         $newProduk->decrement('Stok', $request->jumlah);
         $total_harga = $newProduk->Harga * $request->jumlah;
-
+    
         $transaksi->update([
-            'pelanggan_id' => $request->pelanggan_id,
+            'pelanggan_id' => $request->pelanggan_id,  // Update pelanggan_id yang dipilih
             'produk_id' => $request->produk_id,
             'jumlah' => $request->jumlah,
             'total_harga' => $total_harga,
         ]);
-
+    
         return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil diperbarui!');
     }
-
+    
     // Menampilkan detail transaksi
     public function show(Transaksi $transaksi)
     {
@@ -126,12 +125,17 @@ class TransaksiController extends Controller
 
     // Menghapus transaksi dan mengembalikan stok
     public function destroy(Transaksi $transaksi)
-    {
-        $produk = Produk::findOrFail($transaksi->produk_id);
-        $produk->increment('Stok', $transaksi->jumlah);
+{
+    // Ambil produk yang terkait dengan transaksi
+    $produk = Produk::findOrFail($transaksi->produk_id);
 
-        $transaksi->delete();
+    // Kembalikan stok produk yang terkait dengan transaksi yang dihapus
+    $produk->increment('Stok', $transaksi->jumlah);
 
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dibatalkan dan stok dikembalikan!');
-    }
+    // Hapus transaksi
+    $transaksi->delete();
+
+    return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dibatalkan dan stok dikembalikan!');
+}
+
 }

@@ -38,9 +38,9 @@
         </li>
     @else
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('produk.index') }}">
+            <a class="nav-link" href="{{ route('pelanggan.index') }}">
                 <i class="fas fa-box"></i>
-                <span>Produk</span>
+                <span>Pelanggan</span>
             </a>
         </li>
 

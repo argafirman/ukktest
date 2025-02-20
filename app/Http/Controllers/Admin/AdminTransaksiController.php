@@ -55,7 +55,6 @@ class AdminTransaksiController extends Controller
             'produk_id' => $request->produk_id,
             'jumlah' => $request->jumlah,
             'total_harga' => $produk->Harga * $request->jumlah,
-            'status' => 'pending',
             'tanggal_transaksi' => now(),
         ]);
 
@@ -63,20 +62,7 @@ class AdminTransaksiController extends Controller
     }
 
     // Menyetujui transaksi
-    public function approve($id)
-    {
-        $transaksi = Transaksi::findOrFail($id);
-        $produk = Produk::findOrFail($transaksi->produk_id);
-
-        if ($produk->Stok < $transaksi->jumlah) {
-            return redirect()->back()->with('error', 'Stok tidak cukup untuk menyetujui transaksi!');
-        }
-
-        $produk->decrement('Stok', $transaksi->jumlah);
-        $transaksi->update(['status' => 'approved']);
-
-        return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi disetujui!');
-    }
+    
 
     // Menampilkan form untuk mengedit transaksi
     public function edit($id)

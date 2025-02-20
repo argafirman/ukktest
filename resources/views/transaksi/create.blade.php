@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <h2>Tambah Transaksi</h2>
-        <form action="{{ route('admin.transaksi.store') }}" method="POST">
+        <form action="{{ route('transaksi.store') }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label>Pelanggan</label>
@@ -28,7 +28,7 @@
                 <input type="number" name="jumlah" class="form-control" min="1" required>
             </div>
             <button type="submit" class="btn btn-success">Simpan</button>
-            <a href="{{ route('admin.transaksi.index') }}" class="btn btn-secondary">Batal</a>
+            <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">Batal</a>
         </form>
     </div>
 @endsection
