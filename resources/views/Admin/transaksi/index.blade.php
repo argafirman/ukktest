@@ -15,29 +15,32 @@
         @endif
 
     <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Pelanggan</th>
-                <th>Produk</th>
-                <th>Jumlah</th>
-                <th>Total Harga</th>
-                <th>Tanggal</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($transaksis as $transaksi)
-            <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $transaksi->pelanggan->NamaPelanggan }}</td>
-                <td>{{ $transaksi->produk->NamaProduk }}</td>
-                <td>{{ $transaksi->jumlah }}</td>
-                <td>Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</td>
-                <td>{{ $transaksi->tanggal_transaksi }}</td>
+    <thead>
+        <tr>
+            <th>Pelanggan</th>
+            <th>Produk</th>
+            <th>Jumlah</th>
+            <th>Total Harga</th>
+            <th>Uang Diberikan</th>
+            <th>Kembalian</th>
+            <th>Tanggal</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($transaksis as $transaksi)
+        <tr>
+            <td>{{ $transaksi->pelanggan->NamaPelanggan }}</td>
+            <td>{{ $transaksi->produk->NamaProduk }}</td>
+            <td>{{ $transaksi->jumlah }}</td>
+            <td>Rp{{ number_format($transaksi->total_harga, 0, ',', '.') }}</td>
+            <td>Rp{{ number_format($transaksi->uang_diberikan ?? 0, 0, ',', '.') }}</td>
+<td>Rp{{ number_format($transaksi->kembalian ?? 0, 0, ',', '.') }}</td>
+
+            <td>{{ $transaksi->tanggal_transaksi }}</td>
                 <td>
                     <a href="{{ route('admin.transaksi.show', $transaksi->id) }}" class="btn btn-info btn-sm">Detail</a>
-                    <a href="{{ route('admin.transaksi.edit', $transaksi->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                     <a href="{{ route('admin.transaksi.edit', $transaksi->id) }}" class="btn btn-warning btn-sm">Edit</a>
                     <button class="btn btn-danger btn-sm delete-button" data-id="{{ $transaksi->id }}">Hapus</button>
                 </td>
             </tr>

@@ -7,14 +7,13 @@
         @csrf
         @method('PUT')
         <div class="mb-3">
-            <label>Pelanggan</label>
-            <select name="pelanggan_id" class="form-control" required>
-                @foreach ($pelanggans as $pelanggan)
-                <option value="{{ $pelanggan->id }}" {{ $transaksi->pelanggan_id == $pelanggan->id ? 'selected' : '' }}>
-                    {{ $pelanggan->NamaPelanggan }}
-                </option>
-                @endforeach
-            </select>
+            <label for="NamaPelanggan" class="form-label">Nama Pelanggan</label>
+            <input type="text" class="form-control @error('NamaPelanggan') is-invalid @enderror"
+                   name="NamaPelanggan" value="{{ old('NamaPelanggan', $pelanggan->NamaPelanggan) }}">
+            @error('NamaPelanggan')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>elect>
         </div>
         <div class="mb-3">
             <label>Produk</label>

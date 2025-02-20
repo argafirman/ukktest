@@ -16,19 +16,61 @@
             </div>
             <div class="mb-3">
                 <label>Produk</label>
-                <select name="produk_id" class="form-control" required>
+                <select name="produk_id" class="form-control" id="produk" required>
                     <option value="">Pilih Produk</option>
                     @foreach ($produks as $produk)
-                        <option value="{{ $produk->id }}">{{ $produk->NamaProduk }} - Stok: {{ $produk->Stok }}</option>
+                        <option value="{{ $produk->id }}" data-harga="{{ $produk->Harga }}">
+                            {{ $produk->NamaProduk }} - Stok: {{ $produk->Stok }} - Rp{{ number_format($produk->Harga, 0, ',', '.') }}
+                        </option>
                     @endforeach
                 </select>
             </div>
             <div class="mb-3">
                 <label>Jumlah</label>
-                <input type="number" name="jumlah" class="form-control" min="1" required>
+                <input type="number" name="jumlah" id="jumlah" class="form-control" min="1" required>
+            </div>
+            <div class="mb-3">
+                <label>Total Harga</label>
+                <input type="text" id="total_harga" class="form-control" readonly>
+            </div>
+            <div class="mb-3">
+                <label>Uang Diberikan</label>
+                <input type="number" name="uang_diberikan" id="uang_diberikan" class="form-control" min="0" required>
+            </div>
+            <div class="mb-3">
+                <label>Kembalian</label>
+                <input type="text" id="kembalian" class="form-control" readonly>
             </div>
             <button type="submit" class="btn btn-success">Simpan</button>
             <a href="{{ route('admin.transaksi.index') }}" class="btn btn-secondary">Batal</a>
         </form>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let produkSelect = document.getElementById("produk");
+            let jumlahInput = document.getElementById("jumlah");
+            let totalHargaInput = document.getElementById("total_harga");
+            let uangDiberikanInput = document.getElementById("uang_diberikan");
+            let kembalianInput = document.getElementById("kembalian");
+
+            function hitungTotalHarga() {
+                let harga = produkSelect.options[produkSelect.selectedIndex].getAttribute("data-harga") || 0;
+                let jumlah = jumlahInput.value || 0;
+                totalHargaInput.value = "Rp" + (harga * jumlah).toLocaleString("id-ID");
+                hitungKembalian();
+            }
+
+            function hitungKembalian() {
+                let totalHarga = parseFloat(totalHargaInput.value.replace("Rp", "").replace(/\./g, "")) || 0;
+                let uangDiberikan = parseFloat(uangDiberikanInput.value) || 0;
+                let kembalian = uangDiberikan - totalHarga;
+                kembalianInput.value = kembalian >= 0 ? "Rp" + kembalian.toLocaleString("id-ID") : "Uang tidak cukup!";
+            }
+
+            produkSelect.addEventListener("change", hitungTotalHarga);
+            jumlahInput.addEventListener("input", hitungTotalHarga);
+            uangDiberikanInput.addEventListener("input", hitungKembalian);
+        });
+    </script>
 @endsection

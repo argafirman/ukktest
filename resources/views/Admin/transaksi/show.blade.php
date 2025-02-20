@@ -4,14 +4,7 @@
 <div class="container">
     <div class="card">
         <div class="card-body">
-            <h2 class="text-center mb-4">Table Transaksi</h2>
-
-            <!-- Info Toko -->
-            {{-- <div class="text-center mb-4">
-                <h4>Toko Kami Ambatukam</h4>
-                <p>Jalan Raya Roti Jala Maklima Biadap</p>
-                <p>Telp: (0123) 456-789</p>
-            </div> --}}
+            <h2 class="text-center mb-4">Detail Transaksi</h2>
 
             <!-- Informasi Transaksi -->
             <table class="table table-borderless">
@@ -36,6 +29,14 @@
                     <td>Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</td>
                 </tr>
                 <tr>
+                    <th>Uang Diberikan</th>
+                    <td>Rp {{ number_format($transaksi->uang_diberikan, 0, ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <th>Kembalian</th>
+                    <td>Rp {{ number_format($transaksi->kembalian, 0, ',', '.') }}</td>
+                </tr>
+                <tr>
                     <th>Tanggal Transaksi</th>
                     <td>{{ date('d-m-Y', strtotime($transaksi->tanggal_transaksi)) }}</td>
                 </tr>
@@ -43,19 +44,53 @@
 
             <hr>
 
-            <!-- Pesan Terima Kasih -->
-            {{-- <div class="text-center mt-4">
-                <h5>Terima Kasih Telah Berbelanja!</h5>
-                <p>Silakan datang kembali.</p>
-            </div> --}}
-
-            <!-- Tombol Kembali -->
+            <!-- Tombol Aksi -->
             <div class="text-center mt-3">
-                <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">Kembali</a>
-                <!-- Tombol untuk Cetak Struk -->
-                {{-- <a href="{{ route('struk.cetak', $transaksi->id) }}" class="btn btn-primary" target="_blank">Cetak Struk</a> --}}
+                <a href="{{ route('admin.transaksi.index') }}" class="btn btn-secondary">Kembali</a>
+                <a href="{{ route('admin.transaksi.edit', $transaksi->id) }}" class="btn btn-warning">Edit</a>
+                <button class="btn btn-danger delete-button" data-id="{{ $transaksi->id }}">Hapus</button>
+                <a href="{{ route('struk.cetak', $transaksi->id) }}" class="btn btn-primary" target="_blank">Cetak Struk</a>
             </div>
         </div>
     </div>
 </div>
+
+<!-- SweetAlert untuk Konfirmasi Hapus -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.querySelector('.delete-button').addEventListener('click', function () {
+        const transaksiId = this.dataset.id;
+
+        Swal.fire({
+            title: "Apakah Anda yakin?",
+            text: "Data ini akan dihapus dan tidak bisa dikembalikan!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Ya, hapus!",
+            cancelButtonText: "Tidak, batalkan!",
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.createElement('form');
+                form.action = `/transaksi/${transaksiId}`;
+                form.method = 'POST';
+
+                const csrfField = document.createElement('input');
+                csrfField.type = 'hidden';
+                csrfField.name = '_token';
+                csrfField.value = '{{ csrf_token() }}';
+                form.appendChild(csrfField);
+
+                const methodField = document.createElement('input');
+                methodField.type = 'hidden';
+                methodField.name = '_method';
+                methodField.value = 'DELETE';
+                form.appendChild(methodField);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    });
+</script>
 @endsection

@@ -51,9 +51,9 @@
 <body onload="window.print()">
 
 <div class="container">
-    <h3>Toko Kami Ambatukam</h3>
-    <p>Jalan Raya Roti Jala Maklima Biadap</p>
-    <p>Telp: (0123) 456-789</p>
+    <h3>BAKERYZA</h3>
+    <p>Balen, Bojonegoro-Jawa Timur/p>
+    <p>Telp: (62) 858-5538-6043</p>
     <hr>
     <h4>Struk Transaksi</h4>
 
