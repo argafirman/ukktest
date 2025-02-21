@@ -37,6 +37,10 @@
                     <td>Rp {{ number_format($transaksi->kembalian, 0, ',', '.') }}</td>
                 </tr>
                 <tr>
+                    <th>Metode Pengambilan</th>
+                    <td>{{ $transaksi->metode_pengambilan }}</td>
+                </tr>
+                <tr>
                     <th>Tanggal Transaksi</th>
                     <td>{{ date('d-m-Y', strtotime($transaksi->tanggal_transaksi)) }}</td>
                 </tr>

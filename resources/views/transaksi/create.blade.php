@@ -34,6 +34,13 @@
                 <input type="text" id="total_harga" class="form-control" readonly>
             </div>
             <div class="mb-3">
+                <label>Metode Pengambilan</label>
+                <select name="metode_pengambilan" class="form-control" required>
+                    <option value="Diambil">Diambil</option>
+                    <option value="Diantar">Diantar</option>
+                </select>
+            </div>
+            <div class="mb-3">
                 <label>Uang Diberikan</label>
                 <input type="number" name="uang_diberikan" id="uang_diberikan" class="form-control" min="0" required>
             </div>

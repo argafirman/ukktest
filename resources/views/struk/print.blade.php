@@ -65,7 +65,9 @@
         <tr><th>Total Harga</th><td>: Rp{{ number_format($transaksi->total_harga, 0, ',', '.') }}</td></tr>
         <tr><th>Uang Diberikan</th><td>: Rp{{ number_format($transaksi->uang_diberikan, 0, ',', '.') }}</td></tr>
         <tr><th>Kembalian</th><td>: Rp{{ number_format($transaksi->kembalian, 0, ',', '.') }}</td></tr>
+        <tr><th>Metode Pengambilan</th><td>: {{ $transaksi->metode_pengambilan }}</td></tr>
         <tr><th>Tanggal</th><td>: {{ date('d-m-Y', strtotime($transaksi->tanggal_transaksi)) }}</td></tr>
+
     </table>
 
     <hr>

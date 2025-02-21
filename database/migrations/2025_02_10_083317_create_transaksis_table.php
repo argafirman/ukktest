@@ -17,7 +17,10 @@ return new class extends Migration {
             $table->integer('jumlah');
             $table->decimal('total_harga', 10, 2);
             $table->integer('uang_diberikan')->default(0);
-$table->integer('kembalian')->default(0);
+            $table->integer('kembalian')->default(0);
+
+            // Tambahkan metode pengambilan
+            $table->enum('metode_pengambilan', ['Diambil', 'Diantar'])->default('Diambil');
 
             $table->date('tanggal_transaksi');
             $table->timestamps();
