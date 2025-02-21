@@ -51,9 +51,9 @@
 <body onload="window.print()">
 
 <div class="container">
-    <h3>BAKERYZA</h3>
-    <p>Balen, Bojonegoro-Jawa Timur/p>
-    <p>Telp: (62) 858-5538-6043</p>
+    <h3>Felia Bakery</h3>
+    <p>Sumberrejo, Bojonegoro-Jawa Timur </p>
+    <p>Telp: (62) 882-9619-0618</p>
     <hr>
     <h4>Struk Transaksi</h4>
 

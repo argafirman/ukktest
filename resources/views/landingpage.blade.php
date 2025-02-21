@@ -3,116 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bakeryza</title>
+    <title>Felia Bakery</title>
     <style>
         body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            text-align: center;
+            background-color: #fff4e6;
             margin: 0;
             padding: 0;
+            position: relative;
+            width: 100%;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: Arial, sans-serif;
-            background-color: #f8f1e4;
+            flex-direction: column;
+            background-image: url('{{ asset('images/bg2.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            overflow: hidden;
         }
-        .banner {
-            width: 90%;
-            max-width: 1200px;
-            background: #FFF;
-            text-align: center;
-            padding: 50px;
-            border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            background-image: url('{{ asset('images/wa.jpg') }}');
+        .container {
+            background-color: rgb(71, 46, 20);
+            padding: 40px 10px;
+            flex-grow: 1;
         }
         .title {
-            background-color: #6D4C41;
-            font-size: 60px;
+            font-size: 55px;
             font-weight: bold;
-            color: rgb(237, 227, 224);
-            padding: 10px;
-            border-radius: 10px;
+            color: rgb(247, 213, 189);
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
         }
         .subtitle {
-            font-size: 30px;
-            color: #A0522D;
+            font-size: 28px;
+            color: rgb(233, 181, 143);
+            font-style: italic;
+        }
+        .banner {
+            text-align: center;
+            height: 62vh;
+            display: flex;
+        }
+        .banner .image {
+            flex: -30;
+            display: flex;
+            align-items: center;
+        }
+        .banner-text {
+            width: 40%;
+            font-size: 20px;
+            color: rgb(53, 26, 6);
+            text-align: left;
+            margin-top: 50px;
+        }
+        .footer {
+            background-color: #3a2612;
+            color: white;
+            padding: 15px;
+            font-size: 20px;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-top: 15px;
+            border-radius: 15px;
+            display: block;
+            width: 100%;
+            text-align: center;
+            position: relative;
         }
-        .contact {
-            font-size: 18px;
-            color: #FFF;
-            background-color: #6D4C41;
-            border-radius: 50px;
-            display: inline-block;
-            padding: 10px;
-            margin: 10px;
+        marquee {
+            font-size: 16px;
+            font-weight: bold;
+            display: block;
         }
-        .contact a {
-            color: white;
+        .corner-decoration {
+            position: absolute;
+            padding: 20px;
+            width: 160px;
+            height: 160px;
+        }
+        .top-right {
+            top: 2px;
+            right: 2px;
+        }
+        .nav {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .nav a {
+            color: #3a2612;
+            font-weight: bold;
             text-decoration: none;
-        }
-        .contact a:hover {
-            color: pink;
-        }
-        .info {
             font-size: 18px;
-            color: #6D4C41;
-            margin-top: 20px;
+            background: #f3d9b1;
+            padding: 8px 12px;
+            border-radius: 5px;
         }
-        .price {
-            background: #6D4C41;
-            color: #FFF;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 22px;
-            margin-top: 20px;
-            display: inline-block;
-            border: 0px solid white;
-        }
-        .buttons {
-            margin-top: 20px;
-        }
-        .buttons a {
-            text-decoration: none;
-            color: white;
-            font-size: 18px;
-            padding: 10px 20px;
-            border-radius: 10px;
-            display: inline-block;
-            margin: 5px;
-        }
-        .login {
-            background-color: #A0522D;
-        }
-        .register {
-            background-color: #8B4513;
-        }
-        footer {
-            margin: 1em 0;
-            padding: 1em;
-            background-color: #6D4C41;
+        .nav a:hover {
+            background: #e4b97f;
         }
     </style>
 </head>
 <body>
+    <img src="{{ asset('images/gandum1.png') }}" class="corner-decoration top-right" alt="Leaf Decor">
+    <div class="nav">
+        <a href="{{ route('login') }}">Login</a>
+        <a href="{{ route('register') }}">Registrasi</a>
+    </div>
+    <div class="container">
+        <div class="title">Selamat Datang di Felia Bakery</div>
+        <div class="subtitle">Rasa dan Kualitas Terbaik!</div>
+    </div>
     <div class="banner">
-        <h1 class="title">Welcome to Bakeryza</h1>
-        <div class="gambar">
-            <img src="{{ asset('images/pp.jpg') }}" width="500" height="255" alt="Bakery Items">
-        </div>
-        <p class="subtitle">Freshly Baked, Straight to Your Heart!</p>
-
-        <div class="buttons">
-            <a href="{{ route('login') }}" class="login">Login</a>
-            <a href="{{ route('register') }}" class="register">Register</a>
-        </div>
-
-        <footer>
-            <div class="contact">
-                <a href="https://wa.me/qr/3PEW6CEOX2YEL1">📞 Delivery: 0858-5538-6043</a> | 🏠 Balen, Bojonegoro - Jawa Timur
+        <div class="image">
+            <img src="{{ asset('images/chef1.png') }}" alt="">
+        </div> 
+        <div class="banner-text">
+            <h2>Hidangan berkualitas tinggi dengan harga terjangkau!</h2>
+            <div class="teks">
+                <p>Lagi bad mood? Yuk Mampir ke Felia Bakery!!</p>
+                <p>Disini tersedia beberapa macam roti yang rasanya 100% mantap dan nikmat.</p>
+                <p>Ampuh atasi bad mood! Ubah bad mood jadi good mood di Felia Bakery.</p>
             </div>
-        </footer>
+        </div>
+    </div>
+    <div class="footer">
+        <marquee> ☎️ 088296190618 | 📍 Sumberrejo, Bojonegoro, Jawa Timur | 🚗 Kunjungi Toko Roti Felia Bakery!!</marquee>
     </div>
 </body>
 </html>

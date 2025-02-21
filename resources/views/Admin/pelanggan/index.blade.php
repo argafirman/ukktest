@@ -98,10 +98,11 @@
                     <form id="editForm">
                         @csrf
                         @method('PUT')
+                        <!-- Input hidden untuk menyimpan ID pelanggan -->
+                        <input type="hidden" id="editId" name="id">
                         <div class="mb-3">
                             <label for="editNamaPelanggan" class="form-label">Nama Pelanggan</label>
-                            <input type="text" class="form-control" id="editNamaPelanggan" name="NamaPelanggan"
-                                required>
+                            <input type="text" class="form-control" id="editNamaPelanggan" name="NamaPelanggan" required>
                         </div>
                         <div class="mb-3">
                             <label for="editAlamat" class="form-label">Alamat</label>
@@ -109,8 +110,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="editNomorTelepon" class="form-label">Nomor Telepon</label>
-                            <input type="text" class="form-control" id="editNomorTelepon" name="NomorTelepon"
-                                required>
+                            <input type="text" class="form-control" id="editNomorTelepon" name="NomorTelepon" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </form>
@@ -119,6 +119,7 @@
         </div>
     </div>
 
+    <!-- Library Sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Tambah pelanggan
@@ -186,7 +187,7 @@
             });
         }
 
-
+        // Tampilkan detail pelanggan
         function showDetail(id) {
             fetch(`/pelanggan/${id}`)
                 .then(response => response.json())
@@ -203,15 +204,55 @@
             fetch(`/pelanggan/${id}`)
                 .then(response => response.json())
                 .then(data => {
+                    // Isi data ke form edit
                     document.getElementById('editId').value = data.id;
                     document.getElementById('editNamaPelanggan').value = data.NamaPelanggan;
                     document.getElementById('editAlamat').value = data.Alamat;
                     document.getElementById('editNomorTelepon').value = data.NomorTelepon;
-
+                    
+                    // Ubah atribut action form edit secara dinamis
+                    document.getElementById('editForm').setAttribute('action', `/pelanggan/${id}`);
+                    
                     // Tampilkan modal edit
-                    let editModal = new bootstrap.Modal(document.getElementById('editModal'));
-                    editModal.show();
+                    new bootstrap.Modal(document.getElementById('editModal')).show();
                 });
         }
+
+        // Proses submit form edit dengan method PUT
+        document.getElementById('editForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let id = document.getElementById('editId').value;
+            let formData = {
+                NamaPelanggan: document.getElementById('editNamaPelanggan').value,
+                Alamat: document.getElementById('editAlamat').value,
+                NomorTelepon: document.getElementById('editNomorTelepon').value,
+            };
+
+            fetch(`/pelanggan/${id}`, {
+                method: "PUT",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                Swal.fire({
+                    title: "Berhasil!",
+                    text: data.message,
+                    icon: "success",
+                    draggable: true
+                }).then(() => location.reload());
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: "Gagal!",
+                    text: "Terjadi kesalahan saat mengupdate pelanggan.",
+                    icon: "error",
+                    draggable: true
+                });
+            });
+        });
     </script>
 @endsection
