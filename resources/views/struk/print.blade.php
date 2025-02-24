@@ -51,9 +51,9 @@
 <body onload="window.print()">
 
 <div class="container">
-    <h3>Felia Bakery</h3>
-    <p>Sumberrejo, Bojonegoro-Jawa Timur </p>
-    <p>Telp: (62) 882-9619-0618</p>
+    <h3>Ryan Bakery</h3>
+    <p>Kapas, Bojonegoro-Jawa Timur </p>
+    <p>Telp: (62) 882-5672-2762</p>
     <hr>
     <h4>Struk Transaksi</h4>
 
@@ -63,13 +63,16 @@
         <tr><th>Produk</th><td>: {{ $transaksi->produk->NamaProduk }}</td></tr>
         <tr><th>Jumlah</th><td>: {{ $transaksi->jumlah }}</td></tr>
         <tr><th>Total Harga</th><td>: Rp{{ number_format($transaksi->total_harga, 0, ',', '.') }}</td></tr>
+        <tr><th>Total Ongkir</th><td>: Rp{{ number_format($transaksi->ongkir, 0, ',', '.') }}</td></tr>
+        <tr><th><strong>Total Bayar</strong></th> 
+            <td><strong>: Rp{{ number_format($transaksi->total_harga + $transaksi->ongkir, 0, ',', '.') }}</strong></td>
+        </tr>
         <tr><th>Uang Diberikan</th><td>: Rp{{ number_format($transaksi->uang_diberikan, 0, ',', '.') }}</td></tr>
         <tr><th>Kembalian</th><td>: Rp{{ number_format($transaksi->kembalian, 0, ',', '.') }}</td></tr>
         <tr><th>Metode Pengambilan</th><td>: {{ $transaksi->metode_pengambilan }}</td></tr>
         <tr><th>Tanggal</th><td>: {{ date('d-m-Y', strtotime($transaksi->tanggal_transaksi)) }}</td></tr>
-
     </table>
-
+    
     <hr>
     <div class="footer">
         <p>Terima Kasih Telah Berbelanja!</p>

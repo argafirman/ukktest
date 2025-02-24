@@ -2,7 +2,7 @@
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md transform transition duration-500 hover:scale-105">
         <!-- Logo atau ikon tambahan -->
         <div class="flex justify-center mb-6">
-            <img src="{{ asset('images/icon login.png') }}" alt="Logo Felia Bakery" class="">
+            <img src="{{ asset('images/logoKue3.png') }}" alt="Logo Ryan Bakery" class="">
         </div>
 
         <!-- Session Status -->

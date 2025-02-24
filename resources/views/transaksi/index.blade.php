@@ -14,92 +14,94 @@
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-    <table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Pelanggan</th>
-            <th>Produk</th>
-            <th>Jumlah</th>
-            <th>Total Harga</th>
-            <th>Uang Diberikan</th>
-            <th>Kembalian</th>
-            <th>Tanggal</th>
-            <th>Aksi</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($transaksis as $transaksi)
-        <tr>
-            <td>{{ $transaksi->pelanggan->NamaPelanggan }}</td>
-            <td>{{ $transaksi->produk->NamaProduk }}</td>
-            <td>{{ $transaksi->jumlah }}</td>
-            <td>Rp{{ number_format($transaksi->total_harga, 0, ',', '.') }}</td>
-            <td>Rp{{ number_format($transaksi->uang_diberikan ?? 0, 0, ',', '.') }}</td>
-<td>Rp{{ number_format($transaksi->kembalian ?? 0, 0, ',', '.') }}</td>
-
-            <td>{{ $transaksi->tanggal_transaksi }}</td>
-                <td>
-                    <a href="{{ route('transaksi.show', $transaksi->id) }}" class="btn btn-info btn-sm">Detail</a>
-                    {{-- <a href="{{ route('transaksi.edit', $transaksi->id) }}" class="btn btn-warning btn-sm">Edit</a> --}}
-                    <button class="btn btn-danger btn-sm delete-button" data-id="{{ $transaksi->id }}">Hapus</button>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Pelanggan</th>
+                    <th>Produk</th>
+                    <th>Jumlah</th>
+                    <th>Total Harga</th>
+                    <th>Biaya Ongkir</th>
+                    <th>Total Bayar</th> <!-- Kolom baru -->
+                    <th>Uang Diberikan</th>
+                    <th>Kembalian</th>
+                    <th>Tanggal</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($transaksis as $transaksi)
+                <tr>
+                    <td>{{ $transaksi->pelanggan->NamaPelanggan }}</td>
+                    <td>{{ $transaksi->produk->NamaProduk }}</td>
+                    <td>{{ $transaksi->jumlah }}</td>
+                    <td>Rp{{ number_format($transaksi->total_harga, 0, ',', '.') }}</td>
+                    <td>Rp{{ number_format($transaksi->ongkir ?? 0, 0, ',', '.') }}</td>
+                    <td>
+                        <strong>Rp{{ number_format(($transaksi->total_harga + ($transaksi->ongkir ?? 0)), 0, ',', '.') }}</strong>
+                    </td> <!-- Perhitungan total bayar -->
+                    <td>Rp{{ number_format($transaksi->uang_diberikan ?? 0, 0, ',', '.') }}</td>
+                    <td>Rp{{ number_format($transaksi->kembalian ?? 0, 0, ',', '.') }}</td>
+                    <td>{{ $transaksi->tanggal_transaksi }}</td>
+                    <td>
+                        <a href="{{ route('transaksi.show', $transaksi->id) }}" class="btn btn-info btn-sm">Detail</a>
+                        <button class="btn btn-danger btn-sm delete-button" data-id="{{ $transaksi->id }}">Hapus</button>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-            confirmButton: "btn btn-success",
-            cancelButton: "btn btn-danger"
-        },
-        buttonsStyling: false
-    });
-    // SweetAlert Confirmation for Delete
-    document.querySelectorAll('.delete-button').forEach(button => {
-        button.addEventListener('click', function () {
-            const transaksiId = this.dataset.id;
+    document.addEventListener("DOMContentLoaded", function () {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
-            swalWithBootstrapButtons.fire({
-                title: "Apakah Anda yakin?",
-                text: "Data ini akan dihapus dan tidak bisa dikembalikan!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Ya, hapus!",
-                cancelButtonText: "Tidak, batalkan!",
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Submit form programmatically
-                    const form = document.createElement('form');
-                    form.action = `/transaksi/${transaksiId}`;
-                    form.method = 'POST';
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const transaksiId = this.dataset.id;
 
-                    // Add CSRF and method fields
-                    const csrfField = document.createElement('input');
-                    csrfField.type = 'hidden';
-                    csrfField.name = '_token';
-                    csrfField.value = '{{ csrf_token() }}';
-                    form.appendChild(csrfField);
+                Swal.fire({
+                    title: "Apakah Anda yakin?",
+                    text: "Data ini akan dihapus dan tidak bisa dikembalikan!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Ya, hapus!",
+                    cancelButtonText: "Tidak, batalkan!",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Buat form hapus secara dinamis
+                        const form = document.createElement('form');
+                        form.action = `/transaksi/${transaksiId}`;
+                        form.method = 'POST';
 
-                    const methodField = document.createElement('input');
-                    methodField.type = 'hidden';
-                    methodField.name = '_method';
-                    methodField.value = 'DELETE';
-                    form.appendChild(methodField);
+                        // Tambahkan CSRF token
+                        const csrfField = document.createElement('input');
+                        csrfField.type = 'hidden';
+                        csrfField.name = '_token';
+                        csrfField.value = csrfToken;
+                        form.appendChild(csrfField);
 
-                    document.body.appendChild(form);
-                    form.submit();
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    swalWithBootstrapButtons.fire({
-                        title: "Dibatalkan",
-                        text: "Data tidak dihapus!",
-                        icon: "error"
-                    });
-                }
+                        // Tambahkan method DELETE
+                        const methodField = document.createElement('input');
+                        methodField.type = 'hidden';
+                        methodField.name = '_method';
+                        methodField.value = 'DELETE';
+                        form.appendChild(methodField);
+
+                        document.body.appendChild(form);
+                        form.submit();
+                    } else {
+                        Swal.fire({
+                            title: "Dibatalkan",
+                            text: "Data tidak dihapus!",
+                            icon: "error"
+                        });
+                    }
+                });
             });
         });
     });

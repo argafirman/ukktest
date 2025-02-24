@@ -30,6 +30,10 @@
                 <input type="number" name="jumlah" id="jumlah" class="form-control" min="1" required>
             </div>
             <div class="mb-3">
+                <label>Ongkos Kirim</label>
+                <input type="number" name="ongkir" id="ongkir" class="form-control" min="0" value="0" required>
+            </div>
+            <div class="mb-3">
                 <label>Total Harga</label>
                 <input type="text" id="total_harga" class="form-control" readonly>
             </div>
@@ -57,6 +61,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             let produkSelect = document.getElementById("produk");
             let jumlahInput = document.getElementById("jumlah");
+            let ongkirInput = document.getElementById("ongkir");
             let totalHargaInput = document.getElementById("total_harga");
             let uangDiberikanInput = document.getElementById("uang_diberikan");
             let kembalianInput = document.getElementById("kembalian");
@@ -64,7 +69,9 @@
             function hitungTotalHarga() {
                 let harga = produkSelect.options[produkSelect.selectedIndex].getAttribute("data-harga") || 0;
                 let jumlah = jumlahInput.value || 0;
-                totalHargaInput.value = "Rp" + (harga * jumlah).toLocaleString("id-ID");
+                let ongkir = parseFloat(ongkirInput.value) || 0;
+                let total = (harga * jumlah) + ongkir;
+                totalHargaInput.value = "Rp" + total.toLocaleString("id-ID");
                 hitungKembalian();
             }
 
@@ -77,7 +84,8 @@
 
             produkSelect.addEventListener("change", hitungTotalHarga);
             jumlahInput.addEventListener("input", hitungTotalHarga);
+            ongkirInput.addEventListener("input", hitungTotalHarga);
             uangDiberikanInput.addEventListener("input", hitungKembalian);
         });
     </script>
-@endsection
+@endsection  

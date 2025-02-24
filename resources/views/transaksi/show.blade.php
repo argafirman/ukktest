@@ -29,6 +29,14 @@
                     <td>Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</td>
                 </tr>
                 <tr>
+                    <th>Total Ongkir</th>
+                    <td>Rp {{ number_format($transaksi->ongkir, 0, ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <th><strong>Total Bayar</strong></th> <!-- Kolom baru -->
+                    <td><strong>Rp {{ number_format(($transaksi->total_harga + $transaksi->ongkir), 0, ',', '.') }}</strong></td>
+                </tr>
+                <tr>
                     <th>Uang Diberikan</th>
                     <td>Rp {{ number_format($transaksi->uang_diberikan, 0, ',', '.') }}</td>
                 </tr>
@@ -45,6 +53,7 @@
                     <td>{{ date('d-m-Y', strtotime($transaksi->tanggal_transaksi)) }}</td>
                 </tr>
             </table>
+            
 
             <hr>
 

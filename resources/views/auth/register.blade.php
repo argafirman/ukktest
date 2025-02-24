@@ -6,7 +6,7 @@
 
             <!-- Logo atau ikon tambahan -->
             <div class="flex justify-center mb-2">
-                <img src="{{ asset('images/icon login.png') }}" alt="Logo Felia Bakery" class="">
+                <img src="{{ asset('images/logo roti.png') }}" alt="Logo Roti" class="">
             </div>
 
             <!-- Name -->

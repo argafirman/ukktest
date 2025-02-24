@@ -35,7 +35,29 @@ class TransaksiController extends Controller
         return view('transaksi.create', compact('pelanggans', 'produks'));
     }
 
-    // Menyimpan transaksi baru dengan metode_pengambilan
+    //Menghapus data
+    public function destroy($id)
+{
+    $transaksi = Transaksi::findOrFail($id);
+    $transaksi->delete();
+
+    return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dihapus.');
+}
+
+    // Menghitung ongkos kirim
+    public function hitungOngkir(Request $request)
+    {
+        $request->validate([
+            'jarak' => 'required|numeric|min:1',
+        ]);
+
+        $tarif_per_km = 5000; // Tarif ongkir per km
+        $ongkir = $request->jarak * $tarif_per_km;
+
+        return response()->json(['ongkir' => $ongkir]);
+    }
+
+    // Menyimpan transaksi baru dengan metode_pengambilan dan ongkir
     public function store(Request $request)
     {
         $request->validate([
@@ -43,7 +65,8 @@ class TransaksiController extends Controller
             'pelanggan_id' => 'required|exists:pelanggans,id',
             'jumlah' => 'required|integer|min:1',
             'uang_diberikan' => 'required|numeric|min:0',
-            'metode_pengambilan' => 'required|in:Diambil,Diantar', // Validasi tambahan
+            'metode_pengambilan' => 'required|in:Diambil,Diantar',
+            'ongkir' => 'required|numeric|min:0',
         ]);
 
         $produk = Produk::findOrFail($request->produk_id);
@@ -52,7 +75,7 @@ class TransaksiController extends Controller
             return redirect()->back()->with('error', 'Stok tidak cukup!');
         }
 
-        $total_harga = $produk->Harga * $request->jumlah;
+        $total_harga = ($produk->Harga * $request->jumlah) + $request->ongkir;
         $uang_diberikan = (float) $request->uang_diberikan;
         $kembalian = $uang_diberikan - $total_harga;
 
@@ -69,73 +92,18 @@ class TransaksiController extends Controller
             'total_harga' => $total_harga,
             'uang_diberikan' => $uang_diberikan,
             'kembalian' => $kembalian,
-            'metode_pengambilan' => $request->metode_pengambilan, // Simpan metode pengambilan
+            'metode_pengambilan' => $request->metode_pengambilan,
+            'ongkir' => $request->ongkir,
             'tanggal_transaksi' => now(),
         ]);
 
         return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil!');
     }
 
-    // Menampilkan form edit transaksi
-    public function edit($id)
-    {
-        $transaksi = Transaksi::findOrFail($id);
-        $pelanggans = Pelanggan::all();
-        $produks = Produk::all();
-        return view('transaksi.edit', compact('transaksi', 'pelanggans', 'produks'));
-    }
-
-    // Memperbarui transaksi, termasuk metode_pengambilan
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'pelanggan_id' => 'required|exists:pelanggans,id',
-            'produk_id' => 'required|exists:produks,id',
-            'jumlah' => 'required|integer|min:1',
-            'metode_pengambilan' => 'required|in:Diambil,Diantar', // Validasi tambahan
-        ]);
-
-        $transaksi = Transaksi::findOrFail($id);
-        $oldProduk = Produk::findOrFail($transaksi->produk_id);
-
-        // Kembalikan stok produk lama sebelum mengubah transaksi
-        $oldProduk->increment('Stok', $transaksi->jumlah);
-
-        $newProduk = Produk::findOrFail($request->produk_id);
-        if ($newProduk->Stok < $request->jumlah) {
-            return redirect()->back()->with('error', 'Stok tidak mencukupi!');
-        }
-
-        // Kurangi stok produk baru
-        $newProduk->decrement('Stok', $request->jumlah);
-        $total_harga = $newProduk->Harga * $request->jumlah;
-
-        $transaksi->update([
-            'pelanggan_id' => $request->pelanggan_id,
-            'produk_id' => $request->produk_id,
-            'jumlah' => $request->jumlah,
-            'total_harga' => $total_harga,
-            'metode_pengambilan' => $request->metode_pengambilan, // Update metode pengambilan
-        ]);
-
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil diperbarui!');
-    }
-
     // Menampilkan detail transaksi
-    public function show(Transaksi $transaksi)
+    public function show($id)
     {
+        $transaksi = Transaksi::with(['pelanggan', 'produk'])->findOrFail($id);
         return view('transaksi.show', compact('transaksi'));
-    }
-
-    // Menghapus transaksi dan mengembalikan stok
-    public function destroy(Transaksi $transaksi)
-    {
-        // Kembalikan stok produk sebelum menghapus transaksi
-        $produk = Produk::findOrFail($transaksi->produk_id);
-        $produk->increment('Stok', $transaksi->jumlah);
-
-        $transaksi->delete();
-
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dibatalkan dan stok dikembalikan!');
     }
 }

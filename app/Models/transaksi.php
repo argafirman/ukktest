@@ -18,6 +18,8 @@ class Transaksi extends Model
         'total_harga',
         'uang_diberikan',
     'kembalian',
+        'ongkir',
+        'total_bayar',
     'tanggal_transaksi',
     ];
 

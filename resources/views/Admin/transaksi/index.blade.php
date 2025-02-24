@@ -35,7 +35,7 @@
             <td>{{ $transaksi->jumlah }}</td>
             <td>Rp{{ number_format($transaksi->total_harga, 0, ',', '.') }}</td>
             <td>Rp{{ number_format($transaksi->uang_diberikan ?? 0, 0, ',', '.') }}</td>
-<td>Rp{{ number_format($transaksi->kembalian ?? 0, 0, ',', '.') }}</td>
+            <td>Rp{{ number_format($transaksi->kembalian ?? 0, 0, ',', '.') }}</td>
 
             <td>{{ $transaksi->tanggal_transaksi }}</td>
                 <td>
